@@ -1,0 +1,238 @@
+<template>
+  <div class="useCarList">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">我的派车</span>
+      </div>
+      <div slot="right" class="title-right" @click="filtrate">
+        <img src="@/assets/images/list-filter.png" alt="">
+        <span class="f24 fC333">筛选</span>
+      </div>
+    </header-bar>
+    <tabs v-model="currentIndex" color="#fff" title-active-color="#333" swipeable title-inactive-color="#999" @click="click" style="width: 100%;">
+      <tab v-for="(item, index) in list" :title="item.name" :key="index">
+      </tab>
+    </tabs>
+    <div style="height:90vh;overflow:scroll">
+      <Loadmore :top-method="loadTop"
+                :bottom-method="loadBottom"
+                :bottomAllLoaded="allLoaded"
+                bottomPullText="上拉加载"
+                bottomDropText="加载更多"
+                :autoFill="false"
+                ref="loadmore">
+        <swipe @change="onChange" :initial-swipe="currentIndex" :show-indicators="false">
+          <swipe-item v-for="(item, index) in list" :key="index">
+            <div class="content" v-if="listData.length > 0">
+              <ul class="list-box">
+                <li v-for="(use, ind) in listData" :key="ind" @click="goDetail(use)">
+                  <img :src="use.img_path + use.car_picture" alt="">
+                  <div class="list-center" style="flex-grow: 1;">
+                    <h4 class="f28">{{ use.yong_che_no }}</h4>
+                    <p>用车人：<span class="fC333">{{ use.yong_che_ren }}</span></p>
+                    <p>用车时间：<span class="blue">{{ use.apply_use_time_str }}</span></p>
+                    <p class="nowrap">出发地：<span class="green">{{ use.apply_use_address_1 }}<em v-if="use.apply_use_address_2">({{ use.apply_use_address_2 }})</em></span></p>
+                    <p class="nowrap">目的地：<span class="blue">{{ use.apply_destination_1 }}<em v-if="use.apply_destination_2">({{ use.apply_destination_2 }})</em></span></p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="no-data-wrapper" v-else>
+              <no-data></no-data>
+            </div>
+          </swipe-item>
+        </swipe>
+      </Loadmore>
+    </div>
+    <!-- 筛选框 -->
+    <Popup
+      v-model="popupVisible"
+      position="right">
+      <div class="filter-box">
+        <h3>筛选<img src="@/assets/images/list-shouqi.png" alt="" @click="closePopup"></h3>
+        <div class="form-box">
+          <cell-group>
+            <p class="title-item">订单编号</p>
+            <field v-model="form.yongCheNo" placeholder="请输入订单编号" />
+          </cell-group>
+          <cell-group>
+            <p class="title-item">部门名称</p>
+            <field v-model="form.deptName" placeholder="请输入部门名称" />
+          </cell-group>
+          <cell-group>
+            <p class="title-item">起始日期</p>
+            <field v-model="form.time1" placeholder="起始日期" disabled @click="toTimeClick('start')" />
+          </cell-group>
+          <cell-group>
+            <p class="title-item">截止日期</p>
+            <field v-model="form.time2" placeholder="截止日期" disabled @click="toTimeClick('end')" />
+          </cell-group>
+        </div>
+        <div class="btn-box">
+          <button @click="reset">重置</button>
+          <button class="doOk" @click="submit">确定</button>
+        </div>
+      </div>
+    </Popup>
+    <action-sheet v-model="showDateTime">
+      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" v-if="showDateTime" :title="this.timeType === 'start' ? '起始时间' : '截止时间'"></datetime-picker>
+    </action-sheet>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon, Tab, Tabs, Swipe, SwipeItem, Field, CellGroup, DatetimePicker, ActionSheet } from 'vant'
+import { Loadmore, Popup } from 'mint-ui'
+import NoData from '@/components/no-data/no-data'
+import 'mint-ui/lib/style.css'
+import { convoyList } from '@/libs/const'
+import moment from 'moment'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Tab,
+    Tabs,
+    Loadmore,
+    Swipe,
+    SwipeItem,
+    Popup,
+    Field,
+    CellGroup,
+    DatetimePicker,
+    ActionSheet,
+    NoData
+  },
+  data () {
+    return {
+      name: '',
+      popupVisible: false,
+      allLoaded: false,
+      currentIndex: this.$store.state.sendCarData ? this.$store.state.sendCarData.currentIndex : 0,
+      stsCls: {
+        0: 'yellow',
+        1: 'yellow',
+        2: 'red'
+      },
+      list: [
+        {
+          key: 0,
+          name: '需要派车'
+        },
+        {
+          key: 1,
+          name: '派车记录'
+        }
+      ],
+      form: {
+        limit: 6,
+        pagest: 1,
+        yongCheNo: '', // 订单号
+        deptName: '', // 单位名称
+        time1: '', // 起始时间
+        time2: '', // 截止时间
+        type: '0' // 数据类型
+      },
+      listData: [],
+      showDateTime: false,
+      timeType: ''
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.form.type = this.list[this.currentIndex].key
+      this.getList()
+    })
+  },
+  methods: {
+    loadTop () {
+      this.form.pagest = 1
+      this.getList()
+      this.$refs.loadmore.onTopLoaded()
+    },
+    loadBottom () {
+      this.form.pagest += 1
+      this.getList('bottom')
+      this.$refs.loadmore.onBottomLoaded()
+    },
+    onChange (index) {
+      this.currentIndex = index
+      this.form.type = this.list[index].key
+      this.getList()
+    },
+    toBack () {
+      this.$store.commit('setSendCar', '')
+      this.$router.push({
+        path: '/sendCar',
+        query: {
+          active: 2
+        }
+      })
+    },
+    click (index) {
+      this.currentIndex = index
+      this.form.type = this.list[index].key
+      this.getList()
+    },
+    goDetail (item) {
+      this.$store.commit('setSendCar', { id: item.id, currentIndex: this.currentIndex })
+      this.$router.push({
+        path: '/sendCarDetail'
+      })
+    },
+    filtrate () {
+      this.popupVisible = true
+    },
+    reset () {
+      Object.keys(this.form).forEach((key) => {
+        if (!['limit', 'pagest', 'type'].includes(key)) {
+          this.form[key] = ''
+        }
+      })
+    },
+    submit () {
+      this.popupVisible = false
+      this.getList()
+    },
+    closePopup () {
+      this.popupVisible = false
+    },
+    async getList (flag) {
+      await convoyList(this.form, (res) => {
+        if (res.total - (this.form.limit * this.form.pagest) > 0) {
+          this.allLoaded = false
+        } else {
+          this.allLoaded = true
+        }
+        if (flag === 'bottom') {
+          this.listData = this.listData.concat(res.rows)
+        } else {
+          this.listData = res.rows
+        }
+      })
+    },
+    toTimeClick (type) {
+      this.timeType = type
+      this.showDateTime = true
+    },
+    timeCancel () {
+      this.showDateTime = false
+    },
+    timeConfirm (value) {
+      const val = moment(value).format('YYYY-MM-DD HH:mm')
+      switch (this.timeType) {
+        case 'start': this.form.time1 = val; break
+        case 'end': this.form.time2 = val; break
+        default:
+      }
+      this.showDateTime = false
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+  @import '../../../assets/css/commonList';
+</style>

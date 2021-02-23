@@ -1,0 +1,100 @@
+<template>
+  <div class="sendCar">
+      <img class="banner" src="../../assets/images/Index-banner.png"/>
+      <div class="myCar">
+        <div class="myCar-title">
+          <div>
+            <h4 class="f28">调度派车</h4>
+            <p class="fCccc">知你所需，轻松调度</p>
+          </div>
+          <img src="../../assets/images/index3-ddpaiche.png" alt="">
+        </div>
+        <ul class="f24 fC333">
+          <li>
+            <p>调度订单</p>
+            <h5>612</h5>
+          </li>
+          <li>
+            <p>所需车辆</p>
+            <h5>236</h5>
+          </li>
+        </ul>
+        <p class="fCccc f24 myCar-text">调度记录58555</p>
+        <p class="fCccc f24 myCar-text">驳回记录1657</p>
+        <div class="myCar-bottom">
+          <ul class="fC999 f24">
+            <li>
+              <span class="circle"></span>车队
+              <h3  class="fC333 f32">21</h3>
+            </li>
+            <li>
+              <span class="circle circle-green"></span>空闲车辆
+              <h3 class="fC333 f32">21</h3>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="sendCar">
+        <div class="myCar-title">
+          <div>
+            <h4 class="f28">我的派车</h4>
+            <p class="fCccc">知你所需，轻松调度</p>
+          </div>
+          <img src="../../assets/images/index3-wodepc.png" alt="">
+        </div>
+        <ul class="sendCar-list f24 fC999">
+          <li class="fC333">
+            <p>需要派车</p>
+            <h5 class="f48 fBold">1</h5>
+          </li>
+          <li>
+            <p>所属车队</p>
+            <h5>高新区街道车队</h5>
+          </li>
+        </ul>
+         <p class="fCccc f24 myCar-text">派车记录23445</p>
+      </div>
+      <div class="sendCar registerCar">
+        <div class="myCar-title">
+          <div>
+            <h4 class="f28">归队登记</h4>
+            <p class="fCccc">不管在哪，轻松归队</p>
+          </div>
+          <img src="../../assets/images/index3-guiduidj.png" alt="">
+        </div>
+        <ul class="sendCar-list f24 fC999">
+          <li class="fC333">
+            <p>未归队</p>
+            <h5 class="f48 fBold">1</h5>
+          </li>
+          <li class="fC333">
+            <p>已归队</p>
+            <h5 class="f48 fBold">1024</h5>
+          </li>
+        </ul>
+      </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    useCar () {
+      console.log(11)
+      this.$router.push({
+        path: '/applay',
+        query: {}
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'sendCar';
+</style>

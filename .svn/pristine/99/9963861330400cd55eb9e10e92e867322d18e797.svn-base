@@ -1,0 +1,93 @@
+<template>
+  <div class="examine">
+      <header-bar  bacColor="transparent">
+        <div slot="left">
+          <span @click="toBack" class="icons">返回</span>
+        </div>
+        <div slot="center">
+          <span class="title">公务用车管理系统</span>
+        </div>
+        <div slot="right"><span class="icons">搜索</span></div>
+      </header-bar>
+      <img class="banner" src="../../assets/images/Index-banner.png"/>
+      <div class="useCar">
+          <div class="useTitle">
+              <div>
+                  <h3 class="fC333 f28">用车审批</h3>
+                  <p class="fCccc f22">认真细致，服务大众</p>
+              </div>
+              <img src="../../assets/images/index-yongche.png" alt="">
+          </div>
+          <ul class="fC333 firstUl">
+              <li>
+                  <h5 class="f24">未审批</h5>
+                  <p class="f48 fBold">20</p>
+              </li>
+              <li>
+                  <h5 class="f24">今日新增</h5>
+                  <p class="f48 fBold">6</p>
+              </li>
+          </ul>
+          <ul class="secondUl f24 fCccc">
+              <li>
+                  <div>
+                      <img src="../../assets/logo.png" alt="">
+                      <span class="green">李二狗</span>&emsp;需要轿车1辆
+                    </div>
+                    <span>20分钟前</span>
+              </li>
+              <li>
+                  <div>
+                      <img src="../../assets/logo.png" alt="">
+                      <span class="green">李二狗</span>&emsp;需要轿车1辆
+                    </div>
+                    <span>20分钟前</span>
+              </li>
+              <li>
+                  <div>
+                      <img src="../../assets/logo.png" alt="">
+                      <img src="../../assets/logo.png" alt="">
+                      <img src="../../assets/logo.png" alt="">
+                    </div>
+                    <span>查看全部></span>
+              </li>
+          </ul>
+      </div>
+      <div class="record">
+           <h3 class="fC333 f28">审批记录</h3>
+            <ul class="fC333 firstUl">
+              <li>
+                  <h5 class="f24">已审批</h5>
+                  <p class="f48 fBold">20</p>
+              </li>
+              <li>
+                  <h5 class="f24">审批未通过</h5>
+                  <p class="f48 fBold">6</p>
+              </li>
+          </ul>
+      </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+export default {
+  components: {
+    HeaderBar
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    toBack () {
+      console.log(111)
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'examine';
+</style>

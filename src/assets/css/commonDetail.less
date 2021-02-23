@@ -1,0 +1,204 @@
+.detail {
+    padding:120px 36px 40px;
+    font-size: 24px;
+    .carCostInfo {
+        margin-top: 20px;
+        border-top: 1px solid #eee;
+        padding: 20px 0px;
+        line-height: 1.5em;
+        font-size: 28px;
+        span {
+            color: #3378F1;
+        }
+    }
+    .title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .root {
+        background: #3378F1 url('../images/list-bg.png');
+        background-size: 100% 400px;
+        box-shadow: 0px 2px 16px 0px rgba(53, 78, 217, 0.2);
+        border-radius: 12px;
+        margin-top: 20px;
+        padding: 30px;
+        box-sizing: border-box;
+        color: #fff;
+        font-size: 30px;
+        p {
+            opacity: 0.65;
+            font-size: 24px;
+            padding-top: 10px;
+            img {
+                width: 30px;
+                height: 30px;
+                margin-left: 16px;
+            }
+        }
+        img {
+            width: 36px;
+            height: 15px;
+        }
+        .root-center {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 30px 0;
+        }
+    }
+    .user-box {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #737373;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+        .user {
+            h4 {
+                padding-bottom: 10px;
+            }
+        }
+    }
+    .detail-list {
+        color: #737373;
+        li {
+            margin-top: 35px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            span {
+                width: 160px;
+            }
+        }
+    }
+    .btn-box {
+        width: 100%;
+        padding: 36px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        .left {
+            color: #737373;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            img {
+                width: 26px;
+                height: 26px;
+                margin-right: 5px;
+            }
+            span{
+                color: #f60;
+            }
+        }
+        .right {
+            display: flex;
+            button {
+                width: 218px;
+                height: 76px;
+                background: #3378F1;
+                border-radius: 8px;
+                border: 0;
+                color: #fff;
+                margin: 0 10px;
+                font-size: 32px;
+            }
+        }
+        .right-btn-multiple{
+            button{
+                width: auto;
+                padding: 0 15px;
+            }
+        }
+    }
+    .detail-btn {
+        display: flex;
+        flex-direction: row;
+    }
+    .dispatch-choose{
+        border-top: 12px solid #FAFAFA;
+        margin-top: 20px;
+    }
+    .choose-list{
+        position: relative;
+        border-bottom: 1px solid #E6E6E6;
+        padding-bottom: 20px;
+        .label{
+            font-size: 24px;
+            color: #999;
+            line-height: 63px;
+            margin-bottom: 10px;
+        }
+        .choose-btn{
+            position: absolute;
+            right: 0;
+            top: 15px;
+            border-radius: 22px;
+            height: 44px;
+            padding: 0 21px;
+        }
+        .placeholder{
+            font-size: 24px;
+            color: #E0E0E0;
+        }
+        .choose-item{
+            line-height: 1.7;
+            /deep/.van-swipe-cell__wrapper{
+                font-size: 28px;
+            }
+            /deep/.delete-button{
+                height: 44px;
+                display: block;
+            }
+        }
+    }
+}
+.brief-popup{
+    .cell-brief{
+        width: 600px;
+    }
+    .btn-box{
+        display: flex;
+        justify-content: flex-end;
+        padding: 15px;
+        .van-button{
+            height: auto;
+            border: 0;
+        }
+    }
+}
+.choose-popup{
+    height: 50%;
+    .choose-top{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80px;
+        padding: 0 20px;
+        border-bottom: 1px solid #f1f1f1;
+        p{
+            font-size: 28px;
+        }
+        .title{
+            display: block;
+            text-align: center;
+            flex-grow: 1;
+            color: #333;
+        }
+        .cancel{
+            color: #666;
+        }
+        .ok{
+            color: #3378F1;
+        }
+    }
+    .choose-content{
+        height: 600px;
+        overflow-y: auto;
+    }
+}

@@ -1,0 +1,298 @@
+<template>
+  <div class="applay">
+      <header-bar>
+        <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#fff"/>
+        <div slot="center">
+          <span class="title">用车申请</span>
+        </div>
+        <div slot="right"><span class="right-text">用车规则</span></div>
+      </header-bar>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_geren.png" alt="">申请人信息</div>
+        <cell-group>
+          <p class="title-item">用车单位</p>
+          <field v-model="form.name" placeholder="请输入用户名" v-validate="'required'" data-vv-as="姓名" :name="'name'"/>
+        </cell-group>
+        <span v-show="errors2.has('name')" class="help is-error">{{errors2.first('name')}}</span>
+        <cell-group>
+          <p class="title-item">申请人</p>
+          <field v-model="form.perSonCount"  placeholder="请输入用车人数"/>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">联系电话</p>
+          <field v-model="form.phone" placeholder="请输入用户名" />
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_geren.png" alt=""> 个人信息</div>
+        <cell-group>
+          <p class="title-item">乘车人</p>
+          <field v-model="form.name" placeholder="请输入用户名" v-validate="'required'" data-vv-as="姓名" :name="'name'"/>
+        </cell-group>
+        <span v-show="errors2.has('name')" class="help is-error">{{errors2.first('name')}}</span>
+        <cell-group>
+           <p class="title-item">电话</p>
+          <field v-model="form.phone" placeholder="请输入用户名" />
+        </cell-group>
+        <cell-group>
+          <p class="title-item">用车人数</p>
+          <field v-model="form.perSonCount"  placeholder="请输入用车人数"/>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_danwei.png" alt="">单位信息</div>
+        <cell-group>
+           <p class="title-item">用车单位</p>
+          <div class="selector-box">
+            <selector :value="form.unit" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_yongche.png" alt="">用车计划</div>
+        <cell-group>
+          <p class="title-item">用车性质</p>
+          <div class="selector-box">
+            <selector :value="form.nature" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">预计出车时间</p>
+           <div class="change-box">
+             <input v-model="form.timeOut" class="timeText" disabled/><img  @click="changeTime(0)"  src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">预计归队时间</p>
+           <div class="change-box">
+              <input v-model="form.timeIn" class="timeText" disabled/><img  @click="changeTime(2)" src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">出发地</p>
+            <div class="change-box">
+              <input v-model="form.placeOut" class="timeText"/><img  @click="changeAddress" src="@/assets/images/applay_dingwei.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">目的地</p>
+            <div class="change-box">
+              <input v-model="form.placeIn" class="timeText"/><img  @click="changeAddress" src="@/assets/images/applay_dingwei.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">用车区域</p>
+          <div class="selector-box">
+            <selector :value="form.area" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">服务平台</p>
+          <div class="selector-box">
+            <selector :value="form.platform" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">用车事由</p>
+          <div class="selector-box">
+            <selector :value="form.reason" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_zhonglei.png" alt=""> 用车种类</div>
+        <cell-group>
+           <p class="title-item chooseCar"><span>选择车型</span><img src="@/assets/images/applay_add.png" alt="" style="width:24px;height:24px" @click="changeCarKinds"></p>
+           <ul class="changeCar-list">
+             <li v-for="(item, index) in result" :key="index.name">
+                <span class="list-title">{{item.name}}</span>
+                <div class="car-item">
+                  <input type="number" v-model="item.count" placeholder="请输入车辆数">
+                  <img src="@/assets/images/applay_yichu.png" alt="" @click="remove(index)">
+               </div>
+             </li>
+           </ul>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_qita.png" alt="">其他</div>
+        <cell-group>
+           <p class="title-item">图片</p>
+           <div class="upload">
+             <img src="@/assets/images/applay_img.png" alt="">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">备注</p>
+           <field v-model="form.remark" placeholder="请输入备注" />
+        </cell-group>
+      </div>
+      <div class="form-bottom">
+        <button class="fC999">重置</button>
+        <button class="submit">提交</button>
+      </div>
+        <action-sheet v-model="timeShow">
+            <datetime-picker
+            v-if="showTimeOut"
+            v-model="currentDate"
+            type="datetime"
+            title="选择预计出车时间"
+            :min-date="minDate"
+            :max-date="maxDate"
+            @confirm="confirmTimeOut"
+            @cancel="cancelTime"
+            />
+            <datetime-picker
+            v-if="showTimeIn"
+            v-model="currentDate"
+            type="datetime"
+            title="选择预计归队时间"
+            :min-date="minDateIn"
+            :max-date="maxDate"
+            @confirm="confirmTimeIn"
+            @cancel="cancelTime"
+            />
+      </action-sheet>
+      <action-sheet v-model="show" title="用车类型">
+        <div class="content" v-if="show">
+          <checkbox-group v-model="result">
+            <cell-group>
+              <cell
+                v-for="(item, index) in list"
+                clickable
+                :key="item.name"
+                :title="item.name"
+                @click="toggle(index, item)"
+              >
+                <template #right-icon>
+                  <checkbox :name="item" ref="checkboxes" :v-mode="item.isSelect"/>
+                </template>
+              </cell>
+            </cell-group>
+          </checkbox-group>
+        </div>
+      </action-sheet>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import moment from 'moment'
+import '@/validate'
+import { preList } from '@/libs/const'
+import { Field, CellGroup, DatetimePicker, ActionSheet, Checkbox, CheckboxGroup, Cell, Icon } from 'vant'
+import Selector from '@/components/selector/selector'
+export default {
+  components: {
+    HeaderBar,
+    Field,
+    CellGroup,
+    Selector,
+    DatetimePicker,
+    ActionSheet,
+    Checkbox,
+    CheckboxGroup,
+    Cell,
+    Icon
+  },
+  data () {
+    return {
+      show: false,
+      timeShow: false,
+      list1: [],
+      list: [
+        { name: '越野车', isSelect: false, count: '', id: '1' },
+        { name: '越野车1', isSelect: false, count: '', id: '2' },
+        { name: '越野车2', isSelect: false, count: '', id: '3' },
+        { name: '越野车3', isSelect: false, count: '', id: '4' },
+        { name: '越野车4', isSelect: false, count: '', id: '5' },
+        { name: '越野车5', isSelect: false, count: '', id: '6' },
+        { name: '越野车6', isSelect: false, count: '', id: '7' }
+      ],
+      result: [],
+      form: {
+        name: '',
+        timeOut: '2020-11-26 15:47',
+        timeIn: '2020-11-26 15:47',
+        placeOut: '济宁市任城区红星中路13号',
+        placeIn: '济宁市任城区红星中路13号',
+        area: '',
+        remark: '',
+        nature: '',
+        unit: '',
+        perSonCount: '',
+        reason: '',
+        platform: ''
+      },
+      queLevel: [
+        { id: '1', dicName: '李四23' },
+        { id: '1', dicName: '李四33' },
+        { id: '1', dicName: '李四44' },
+        { id: '1', dicName: '李四555' }
+      ],
+      showTimeIn: false,
+      showTimeOut: false,
+      minDate: new Date(),
+      minDateIn: new Date(),
+      maxDate: new Date(2025, 10, 1),
+      currentDate: new Date()
+    }
+  },
+  mounted () {
+    this.getList()
+  },
+  methods: {
+    getList () {
+      preList({}, (res) => {
+        console.log(res)
+      })
+    },
+    remove (index) {
+      this.result.splice(index, 1)
+    },
+    toggle (index, item) {
+      this.$refs.checkboxes[index].toggle()
+      item.isSelect = !item.isSelect
+    },
+    changeCarKinds () {
+      this.show = !this.show
+    },
+    toBack () {
+      this.$router.replace('../index')
+    },
+    levelChange () {
+      console.log(111)
+    },
+    changeAddress () {
+      console.log(1111)
+    },
+    // 时间选择部分
+    confirmTimeOut (value) {
+      this.form.timeOut = moment(value).format('YYYY-MM-DD HH:mm')
+      this.timeShow = false
+      this.minDateIn = value
+    },
+    confirmTimeIn (value) {
+      this.form.timeIn = moment(value).format('YYYY-MM-DD HH:mm')
+      this.timeShow = false
+    },
+    cancelTime () {
+      this.timeShow = false
+    },
+    changeTime (flag) {
+      this.timeShow = true
+      if (flag === 0) {
+        this.showTimeOut = true
+        this.showTimeIn = false
+      } else {
+        this.showTimeIn = true
+        this.showTimeOut = false
+      }
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+     @import 'applay';
+</style>

@@ -1,0 +1,47 @@
+.fCccc {
+    color:#ccc;
+}
+.fC333 {
+    color: #333;
+}
+.fC999 {
+    color: #999;
+}
+.f32 {
+    font-size: 32px;
+}
+.f24 {
+    font-size: 24px;
+}
+.f22 {
+    font-size: 22px;
+}
+.f28 {
+    font-size: 28px;
+}
+.f32 {
+    font-size: 32px;
+}
+.f48 {
+    font-size: 48px;
+}
+.fBold {
+    font-weight: bold;
+}
+.green {
+    color: #38CA80;
+}
+.blue {
+    color: #3378F1;
+}
+.orange {
+    color: orange;
+}
+.is-error {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 24px;
+    color: #f00;
+    text-align: left;
+}

@@ -1,0 +1,74 @@
+<template>
+  <div class="login">
+    <div class="form-box">
+      <img src="../../assets/images/login_chuanshi.png" alt="" class="login-icon">
+      <div class="filed-box">
+        <span class="icon-common">图</span>
+          <field
+        v-model="username"
+        placeholder="请输入账号"
+      />
+      </div>
+      <div class="filed-box">
+        <span class="icon-common">图</span>
+          <field
+        v-model="password"
+        placeholder="请输入密码"
+      />
+      </div>
+      <div class="login-bottom">
+        <checkbox v-model="checked" shape="square">记住密码</checkbox>
+        <span>忘记密码？</span>
+      </div>
+      <Button type="info" @click="doSubmit()">登录</Button>
+    </div>
+    <p class="form-bottom">智慧公务用车管理系统</p>
+  </div>
+</template>
+
+<script>
+import { Button, Field, Checkbox } from 'vant'
+// import VInput from '@/components/v-input'
+import { login } from '@/libs/const'
+import { hexMd5 } from '@/libs/md5'
+export default {
+  name: 'Home',
+  components: {
+    Button,
+    Field,
+    Checkbox
+  },
+  data () {
+    return {
+      username: '',
+      password: '',
+      checked: true
+    }
+  },
+  mounted () {},
+  methods: {
+    async doSubmit () {
+      await login(
+        {
+          userName: this.username,
+          platform: '2',
+          password: hexMd5(this.password),
+          code: window.location.port
+        },
+        (res) => {
+          this.$router.push({
+            path: '/index',
+            query: {
+              test: '1111'
+            }
+          })
+        }
+      )
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'login';
+</style>

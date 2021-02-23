@@ -1,0 +1,120 @@
+.index {
+    padding: 130px 36px 80px;
+    .icons {
+        color: gray;
+        font-size: 34px;
+    }
+    .title {
+        color: #333;
+        font-weight: bold;
+    }
+    .banner {
+        width: 680px;
+        height: 144px;
+        margin: 0 auto;
+    }
+    .userCar-application {
+        height: 128px;
+        background: linear-gradient(150deg, #3976E7, #354ED9);
+        box-shadow: 0px 2px 16px 0px rgba(53, 78, 217, 0.2);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding:30px 40px;
+        margin-top: 20px;
+        box-sizing: border-box;
+        .user-left {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .userCar-center {
+                padding-left: 40px;
+                font-size: 32px;
+                color: #fff;
+                line-height: 1.5em;
+                font-weight: bold;
+                p {            
+                    opacity: 0.65;
+                }         
+            }
+        }
+        img {
+            width: 42px;
+            height: 42px;
+        }
+    }
+    .myCar {
+        height: 348px;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.04);
+        border-radius: 12px;
+        margin: 0 auto;
+        margin-top: 22px;
+        padding: 30px;
+        box-sizing: border-box;
+        .myCar-title {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            p {
+               font-size: 22px; 
+               padding-top: 10px;
+            }
+            img {
+                width: 32px;
+                height: 32px;
+            }
+        }
+        ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding-top: 40px;
+            li {
+                text-align: center;
+                h5 {
+                    padding-top: 5px;
+                    font-weight: bold;
+                    font-size: 42px;
+                }
+            }
+        }
+        .myCar-text {
+            padding-top: 15px;
+        }
+    }
+    .my-box {
+        margin-top: 28px;
+        display: flex;
+        width:100%;
+        justify-content: space-between;
+        .myCommon {
+            width: 326px;
+            height: 340px;
+            padding: 36px;
+            box-sizing: border-box;
+            background: #FFFFFF;
+            box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            font-size: 28px;
+            .myTitle {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                img {
+                    width: 26px;
+                    height: 26px;
+                }
+            }
+            .my-bottom {
+                padding-top: 40px;
+                p {
+                    padding-top: 40px;
+                }
+            }
+        }
+    }
+  }

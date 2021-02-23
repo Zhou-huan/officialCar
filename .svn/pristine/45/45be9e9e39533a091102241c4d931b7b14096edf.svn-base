@@ -1,0 +1,163 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'main-page',
+    component: () => import('@/components/main-page.vue').then(m => m.default),
+    redirect: '/login',
+    children: [
+      {
+        path: '/index',
+        name: 'Index', // 首页
+        meta: {
+          auth: true
+        },
+        component: () => import('@/views/index/Index.vue').then(m => m.default)
+      },
+      {
+        path: '/examine',
+        name: 'Examine', // 审批
+        meta: {
+          auth: true
+        },
+        component: () => import('@/views/examine/Examine.vue').then(m => m.default)
+      },
+      {
+        path: '/sendCar',
+        name: 'SendCar', // 派车
+        meta: {
+          auth: true
+        },
+        component: () => import('@/views/send/SendCar.vue').then(m => m.default)
+      },
+      {
+        path: '/driveCar',
+        name: 'DriveCar', // 审批
+        meta: {
+          auth: true
+        },
+        component: () => import('@/views/drive/DriveCar.vue').then(m => m.default)
+      }
+    ]
+  },
+  // 用车
+  {
+    path: '/applay', // 用车申请
+    name: 'Applay',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/applay/Applay.vue')
+  },
+  {
+    path: '/useCarList', // 用车列表
+    name: 'UseCarList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/useCarList/UseCarList.vue')
+  },
+  {
+    path: '/useCarDetail', // 用车详情
+    name: 'UseCarDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/useCarList/UseCarDetail.vue')
+  },
+  {
+    path: '/costList', // 我的费用列表
+    name: 'CostList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/ourCost/CostList.vue')
+  },
+  {
+    path: '/evaluateList', // 我的评价列表
+    name: 'EvaluateList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/evaluate/EvaluateList.vue')
+  },
+  {
+    path: '/evaluateDetail', // 我的评价详情
+    name: 'EvaluateDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/evaluate/EvaluateDetail.vue')
+  },
+  {
+    path: '/map', // 地图
+    name: 'Map',
+    component: () => import(/* webpackChunkName: "about" */ '../views/index/map/Map.vue')
+  },
+  // 派车
+  {
+    path: '/rejoinList', // 归队列表
+    name: 'RejoinList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/send/rejoin/RejoinList.vue')
+  },
+  {
+    path: '/rejoinListDetail', // 归队列表详情
+    name: 'RejoinListDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/send/rejoin/RejoinListDetail.vue')
+  },
+  {
+    path: '/dispatchList', // 调度列表
+    name: 'DispatchList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/send/dispatch/DispatchList.vue')
+  },
+  {
+    path: '/dispatchDetail', // 调度列表详情
+    name: 'DispatchDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/send/dispatch/DispatchDetail.vue')
+  },
+  {
+    path: '/sendCarList', // 派车列表
+    name: 'SendCarList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/send/sendCar/SendCarList.vue')
+  },
+  {
+    path: '/sendCarDetail', // 派车列表详情
+    name: 'SendCarDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/send/sendCar/SendCarDetail.vue')
+  },
+  // 审批
+  {
+    path: '/carExamineList', // 用车审核列表
+    name: 'CarExamineList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/examine/useCarExamine/CarExamineList.vue')
+  },
+  {
+    path: '/examineDetail', // 用车审核列表详情
+    name: 'ExamineDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/examine/useCarExamine/ExamineDetail.vue')
+  },
+  // 驾驶
+  {
+    path: '/taskList', // 任务列表
+    name: 'TaskList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/drive/task/TaskList.vue')
+  },
+  {
+    path: '/taskDetail', // 任务列表详情
+    name: 'TaskDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/drive/task/TaskDetail.vue')
+  },
+  // 个人中心部分
+  {
+    path: '/changePwd',
+    name: 'ChangePwd',
+    component: () => import(/* webpackChunkName: "about" */ '../views/person/ChangePwd.vue')
+  },
+  {
+    path: '/changePhone',
+    name: 'ChangePhone',
+    component: () => import(/* webpackChunkName: "about" */ '../views/person/ChangePhone.vue')
+  },
+  {
+    path: '/message',
+    name: 'Message',
+    component: () => import(/* webpackChunkName: "about" */ '../views/person/Message.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/login/Login.vue')
+  }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+export default router

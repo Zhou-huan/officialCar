@@ -1,0 +1,107 @@
+<template>
+  <div class="message">
+      <header-bar bacColor="#fff">
+        <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+        <div slot="center">
+          <span class="title fC333 fBold">消息中心</span>
+        </div>
+      </header-bar>
+       <Loadmore :top-method="loadTop"
+                      :bottom-method="loadBottom"
+                      :bottomAllLoaded="allLoaded"
+                      bottomPullText="上拉加载"
+                      bottomDropText="加载更多"
+                     ref="loadmore">
+            <ul class="message-list">
+                <li>
+                    <h3 class="f32 fC333 fBold">用车消息<span class="f24">2020-12-04  10:10:10</span></h3>
+                    <p class="f28">你提出的用车申请已由admin审批通过</p>
+                    <h5 class="f24 blue">详情</h5>
+                </li>
+                <li>
+                    <h3 class="f32 fC333 fBold">用车消息<span class="f24">2020-12-04  10:10:10</span></h3>
+                    <p class="f28">你提出的用车申请已由admin审批通过</p>
+                    <h5 class="f24 blue">详情</h5>
+                </li>
+                <li>
+                    <h3 class="f32 fC333 fBold">用车消息<span class="f24">2020-12-04  10:10:10</span></h3>
+                    <p class="f28">你提出的用车申请已由admin审批通过</p>
+                    <h5 class="f24 blue">详情</h5>
+                </li>
+                <li>
+                    <h3 class="f32 fC333 fBold">用车消息<span class="f24">2020-12-04  10:10:10</span></h3>
+                    <p class="f28">你提出的用车申请已由admin审批通过</p>
+                    <h5 class="f24 blue">详情</h5>
+                </li>
+            </ul>
+        </Loadmore>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon } from 'vant'
+import { Loadmore } from 'mint-ui'
+import 'mint-ui/lib/style.css'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Loadmore
+  },
+  data () {
+    return {
+      allLoaded: false
+    }
+  },
+  methods: {
+    toBack () {
+      this.$router.push('./index')
+    },
+    loadTop () {
+      this.$refs.loadmore.onTopLoaded()
+    },
+    loadBottom () {
+      this.allLoaded = true// 若数据已全部获取完毕
+      console.log('触底啦')
+      this.$refs.loadmore.onBottomLoaded()
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.message {
+  padding: 120px 0;
+  background: #eff0f0;
+  box-sizing: border-box;
+  height: 100%;
+    /deep/.mint-loadmore{
+    .mint-loadmore-top, .mint-loadmore-bottom{
+        text-align: center;
+    }
+    .mint-loadmore-text{
+        font-size: 30px;
+    }
+    }
+  .message-list {
+      padding: 0 36px;
+      min-height: 85vh;
+      li {
+        padding: 26px;
+        margin-top: 26px;
+        background: #FFFFFF;
+        box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        p {
+            padding: 26px 0px;
+            border-bottom: 1px solid #eee;
+            color: #737373;
+        }
+        h5 {
+            padding-top: 20px;
+        }
+      }
+  }
+}
+</style>

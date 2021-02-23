@@ -1,0 +1,84 @@
+<template>
+  <div class="main-page">
+    <router-view />
+    <Tabbar v-model="active" @change="onChange" active-color="#737373" inactive-color="#ccc">
+    <TabbarItem replace to="/index">
+      <span>用车</span>
+      <template #icon="props">
+        <img :src="props.active ? icon.useCarActive : icon.useCar" />
+      </template>
+    </TabbarItem>
+    <TabbarItem  replace to="/examine">
+      <span>审批</span>
+      <template #icon="props">
+        <img :src="props.active ? icon.examineActive : icon.examine" />
+      </template>
+    </TabbarItem>
+    <TabbarItem>
+      <button class="add-btn">+</button>
+    </TabbarItem>
+    <TabbarItem>
+      <span>派车</span>
+      <template #icon="props">
+        <img :src="props.active ? icon.sendCarActive : icon.sendCar" />
+      </template>
+    </TabbarItem>
+    <TabbarItem>
+      <span>驾驶</span>
+      <template #icon="props">
+        <img :src="props.active ? icon.driveCarActive : icon.driveCar" />
+      </template>
+    </TabbarItem>
+    </Tabbar>
+  </div>
+</template>
+
+<script>
+import { Tabbar, TabbarItem } from 'vant'
+export default {
+  components: {
+    Tabbar,
+    TabbarItem
+  },
+  data () {
+    return {
+      active: 0,
+      icon: {
+        useCarActive: require('../assets/images/index-yongcheS.png'),
+        useCar: require('../assets/images/index-yongche1.png'),
+        examineActive: require('../assets/images/index-shengpiS.png'),
+        examine: require('../assets/images/index-shengpi.png'),
+        sendCarActive: require('../assets/images/index-zhipaiS.png'),
+        sendCar: require('../assets/images/index-zhipai.png'),
+        driveCarActive: require('../assets/images/index-jiashiS.png'),
+        driveCar: require('../assets/images/index-jiashi.png')
+      }
+    }
+  },
+  methods: {
+    onChange (index) {
+      this.active = index
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.main-page {
+  height: 100%;
+  background: rgb(242, 245, 244);
+  .van-tabbar {
+  height: 96px !important;
+    .add-btn {
+    width: 108px;
+    height: 56px;
+    background: #3378F1;
+    box-shadow: 0px 2px 16px 0px rgba(53, 78, 217, 0.24);
+    border-radius: 28px;
+    border: 0;
+    line-height: 56px;
+    font-size: 58px !important;
+  }
+}
+}
+</style>

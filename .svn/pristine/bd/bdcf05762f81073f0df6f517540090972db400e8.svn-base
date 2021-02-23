@@ -1,0 +1,96 @@
+import axios from 'axios'
+import router from '../router'
+import vue from '../main.js'
+import qs from 'qs'
+import { getStore, removeStore } from './util'
+
+export const responseHandler = function (response, options) { // 公共响应码集中处理
+  let code = response.code
+  code = Number.parseInt(code, 10)
+  if (code === 200 || code === 0) {
+    options.callback(response)
+    return
+  }
+  if (code === 2 || code === 1 || code === 28) {
+    removeStore('user')
+    removeStore('deptVal')
+    removeStore('patrolSmallTyp')
+    removeStore('appType')
+    vue.$toast('登录过期')
+    if (!options.noLogin) {
+      router.push({
+        path: '/login',
+        query: {
+          redirect: vue.$route.fullPath
+        }
+      })
+    }
+    if (window.WebViewJavascriptBridge) {
+      window.WebViewJavascriptBridge.callHandler('logout')
+    }
+  } else {
+    if (options && options.doNotToast) { // 不要弹Toast，错误代码自己处理 #f76260
+      options.callback(response)
+    } else { // 默认toast处理
+      // vue.$vux.toast.text(`<span style="color: #f76260">${response.msg}</span>`)
+      vue.$toast({
+        message: response.msg,
+        duration: 1000,
+        className: 'toastStyle'
+      })
+    }
+  }
+}
+
+export const fetch = async (url = '', options = {}, type = 'POST') => {
+  await fetchFromAxios(url, options, type)
+}
+/* eslint-disable*/
+const fetchFromAxios = (url = '', options = {}, type = 'POST') => {
+  let user = getStore('user') ? JSON.parse(getStore('user')) : {}
+  let token = user && user.token ? user.token : ''
+  let headers = {
+    'Accept': 'application/json',
+    'Authorization': 'Bearer ' + token
+  }
+  if (options.reqBody) {
+    headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+    headers['X-Requested-With'] = 'XMLHttpRequest'
+  }
+  axios({
+    url: url, // 是用于请求的服务器 URL
+    baseURL: process.env.VUE_APP_URL, // 将自动加在 `url` 前面，除非 `url` 是一个绝对 URL
+    method: type.toLowerCase(), // 请求方式
+    headers: headers, // `headers` 是即将被发送的自定义请求头
+    params: options.reqParams || {}, // 是即将与请求一起发送的 URL 参数
+    data: qs.stringify(options.reqBody) || {}, // `data` 是作为请求主体被发送的数据
+    timeout: 30000 // 设置超时时间
+  }).then((response) => {
+    responseHandler(response.data, options)
+  }).catch(function (error) {
+    let e = { code: '', msg: '' }
+    if (error.response) {
+      e.code = error.response.status
+      e.msg = error.response.statusText
+      switch (e.code) { // 异常情况
+        case 400:
+          e.msg = '请求信息有误'; break
+        case 404:
+          e.msg = '数据不存在'; break
+        case 405:
+          e.msg = '错误的请求类型'; break
+        case 500:
+          e.msg = '服务器开小差了，请稍后再试'; break
+        case 501:
+          console.log('接口[' + url + ']还未实现')
+          e = error.response.data; break
+        case 503:
+          e.msg = '系统维护，请稍后再试'; break
+      }
+    } else {
+      e.code = 600
+      e.msg = (error.message === 'Network Error') ? '网络异常, 请检查网络稍后再试' : '数据处理错误'
+    }
+    responseHandler(e, options)
+  })
+}

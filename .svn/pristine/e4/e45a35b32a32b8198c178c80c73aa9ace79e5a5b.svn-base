@@ -1,0 +1,680 @@
+/** 常量文件 */
+import { fetch } from './fetch'
+import { getStore, setStore } from './util'
+export const lng = '104.077495'
+export const lat = '30.653311'
+export const mapKey = '78e72d25e9e1beb6de870fafe19764e2'
+export const geocoderUrl = 'http://api.map.baidu.com/geocoding/v3/?output=json&pois=1'
+export const geocoderMapKey = 'Fl4n2Y47ksLAsM0SXl4KLt0REt5qvhMo' // 地理编码地图ak
+let viewUrl = process.env.VUE_APP_URL.split('/')
+export const appViewUrl = viewUrl[0] + '//' + viewUrl[2] + '/'
+// 权限码
+export const privilegeCode = {
+  index: { // 首页
+    tree: '525', // 树结构
+    workbench: '', // 工作台
+    newEvents: '529', // 最新事件
+    events: '3', // 当日事件和今日汇总事件
+    patrol: '207', // 巡查上报
+    urge: '264', // 问题督办
+    assuse: '243', // 公众投诉
+    repairs: '278', // 设施报修
+    addpatrol: '208', // 新增巡查
+    addrepairs: '279', // 新增报修
+    addurge: '265', // 新增督办
+    addflct: '131', // 新增设施
+    addsupervise: '459', // 新增督查
+    carStatus: '554', // 车辆轨迹
+    menStatus: '557', // 人员轨迹
+    trashClear: '547', // 垃圾清运
+    Imonitore: '548' // 智能监测
+  },
+  workbeach: { // 工作台
+    people: '531', // 人员
+    car: '530', // 车辆
+    publicToilet: '533', // 公厕
+    transfer: '534', // 中转站
+    dealStation: '535', // 处理站
+    collectStation: '538', // 收集站
+    collectDot: '539', // 收集点
+    trash: '537', // 垃圾桶
+    patrol: '28', // 巡查上报
+    issue: '204', // 问题投诉
+    opinions: '205', // 建设意见
+    supervise: '32', // 问题督办
+    facilities: '33', // 设施维修
+    check: '39', // 考核管理
+    salary: '558' // 考勤
+  },
+  mine: { // 个人中心
+    'update-password': '421' // 修改密码
+  },
+  patrol: { // 巡查上报
+    list: '207', // 列表
+    add: '208', // 新增
+    mod: '209', // 修改
+    detail: '211', // 详情
+    reg: '213', // 立案
+    allot: '214', // 分派
+    ignore: '219', // 忽略
+    sign: '212', // 签到
+    'allot-mod': '214', // 改派
+    deal: '217', // 处理
+    'deal-mod': '691', // 重新处理
+    delay: '215', // 申请延期
+    'delay-check': '216', // 延期审核
+    discard: '221', // 废弃
+    recover: '222', // 恢复
+    urge: '218', // 催办
+    confirm: '220', // 结案
+    del: '210', // 删除
+    file: '223', // 归档
+    deduct: '576' // 扣分
+  },
+  supervise: { // 督办下发
+    list: '264', // 列表
+    add: '265', // 新增
+    mod: '361', // 修改
+    detail: '266', // 详情
+    sign: '267', // 签到
+    deal: '271', // 处理
+    'deal-mod': '693', // 重新处理
+    delay: '269', // 申请延期
+    'delay-check': '270', // 延期审核
+    discard: '274', // 废弃
+    recover: '275', // 恢复
+    urge: '272', // 催办
+    confirm: '273', // 结案
+    del: '578', // 删除
+    file: '276', // 归档
+    deduct: '577', // 扣分
+    'allot-mod': '268', // 改派
+    allot: '268'
+  },
+  facilities: { // 设施维修
+    list: '278', // 列表
+    add: '279', // 新增
+    mod: '570', // 修改
+    detail: '280', // 详情
+    reg: '572', // 立案
+    allot: '282', // 分派
+    ignore: '574', // 忽略
+    sign: '281', // 签到
+    'allot-mod': '282', // 改派
+    deal: '285', // 处理
+    'deal-mod': '694', // 重新处理
+    delay: '283', // 申请延期
+    'delay-check': '284', // 延期审核
+    discard: '288', // 废弃
+    recover: '289', // 恢复
+    urge: '286', // 催办
+    confirm: '287', // 结案
+    del: '579', // 删除
+    file: '290' // 归档
+  },
+  Iscomplaint: { // 问题投诉
+    list: '243', // 列表
+    add: '244', // 新增
+    mod: '245', // 修改
+    detail: '246', // 详情
+    reg: '248', // 立案
+    allot: '249', // 分派
+    ignore: '254', // 忽略
+    sign: '247', // 签到
+    'allot-mod': '249', // 改派
+    deal: '252', // 处理
+    'deal-mod': '692', // 重新处理
+    delay: '250', // 申请延期
+    'delay-check': '251', // 延期审核
+    discard: '256', // 废弃
+    recover: '257', // 恢复
+    urge: '253', // 催办
+    confirm: '255', // 结案
+    del: '580', // 删除
+    file: '258', // 归档
+    deduct: '581' // 扣分
+  },
+  opinions: { // 建设意见
+    list: '260',
+    ignore: '261',
+    reply: '262',
+    add: '582'
+  },
+  assess: { // 督察
+    list: '21', // 列表
+    mod: '21', // 修改
+    del: '21', // 删除
+    add: '21' // 添加
+  },
+  monitor: { // 监控
+    center: '2' // 监控中心
+  },
+  attendance: { // 考勤
+    dept: '49', // 部门
+    person: '49' // 人员考勤, 排班
+  }
+}
+
+// 登录
+export const login = (data, callback) => fetch('/loginManage/login', {
+  callback,
+  reqBody: data
+})
+// 自动更新token
+export const refresh = (data, callback) => fetch('loginManage/token', {
+  callback,
+  reqBody: data
+})
+// 修改密码
+export const updatePwd = (data, callback) => fetch('/user/cancelLogin', {
+  callback,
+  reqBody: data
+})
+
+// 获取推送关注信息
+export const findAlarmConcern = (data, callback) => fetch('/cleannet/findAlarmConcern', {
+  callback,
+  reqBody: data
+})
+
+// 关注
+export const addOrModAlarmConcern = (data, callback) => fetch('/cleannet/addOrModAlarmConcern', {
+  callback,
+  reqBody: data
+})
+
+// 获取字典数据
+export const queryDataDictionary = (data, callback) => fetch('/datadictionary/queryDataDictionary', {
+  callback,
+  reqBody: data
+})
+
+// 获取问题类型大类小类字典
+export const queryQuestionType = (data, callback) => fetch('/datadictionary/findDictionaryIdPidByDicType', {
+  callback,
+  reqBody: data
+})
+// 获取设施类型大小类字典
+export const queryFcltType = (data, callback) => fetch('/fclt/qryFcltType', {
+  callback,
+  reqBody: data
+})
+// 获取报警数据字典
+export const getEventDictTree = (data, callback) => fetch('/datadictionary/getEventDictTree', {
+  callback,
+  reqBody: data
+})
+
+// 获取数据字典集合
+export const sysDicMap = (data, callback) => fetch('/sysDic/sysDicMap', {
+  callback,
+  reqBody: data
+})
+
+// 出勤情况
+export const personRunStatus = (data, callback) => fetch('/cleannet/personRunStatus', {
+  callback,
+  reqBody: data
+})
+
+// 垃圾清运，道路作业
+export const trashRoadData = (data, callback) => fetch('/indexManage/IndexStatistic', {
+  callback,
+  reqBody: data
+})
+
+// 消息数量
+export const getMsgNumByUser = (data, callback) => fetch('/sanitation/getMsgNumByUser', {
+  callback,
+  reqBody: data
+})
+// 获取单个事件消息数量
+export const getMsgNumByUserAndEventType = (data, callback) => fetch('sanitation/getMsgNumByUserAndEventType', {
+  callback,
+  reqBody: data
+})
+// 消息列表
+export const messageList = (data, callback) => fetch('/mobile/mobileMessage', {
+  callback,
+  reqBody: data
+})
+// 读消息
+export const readMessage = (data, callback) => fetch('/mobile/readMessage', {
+  callback,
+  reqBody: data
+})
+
+// 部门树
+export const getDeptTree = (data, callback) => fetch('/department/getDeptTree2', {
+  callback,
+  reqBody: data
+})
+
+// 部门下统计
+export const getObjectNumOfDept = (data, callback) => fetch('/department/getObjectNumOfDept', {
+  callback,
+  reqBody: data
+})
+
+// 设施运行情况
+export const fcltCondition = (data, callback) => fetch('/mobile/fcltCondition', {
+  callback,
+  reqBody: data
+})
+
+// 超时工单
+export const cleanRunSchedulingTotal = (data, callback) => fetch('/cleannet/cleanRunSchedulingTotal', {
+  callback,
+  reqBody: data
+})
+
+// 工作情况
+export const workingCondition = (data, callback) => fetch('/mobile/workingCondition', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报新增
+export const addEvent = (data, callback) => fetch('/eventDispatch/addEvent', {
+  callback,
+  reqBody: data
+})
+// 巡查上报立案
+export const addReg = (data, callback) => fetch('/eventDispatch/addRegister', {
+  callback,
+  reqBody: data
+})
+// 巡查上报废弃
+export const addDiscard = (data, callback) => fetch('/eventDispatch/addDiscard', {
+  callback,
+  reqBody: data
+})
+// 巡查上报催办
+export const addUrge = (data, callback) => fetch('/eventDispatch/addUrge', {
+  callback,
+  reqBody: data
+})
+// 巡查上报结案
+export const addCloseACase = (data, callback) => fetch('/eventDispatch/addCloseACase', {
+  callback,
+  reqBody: data
+})
+// 巡查上报忽略
+export const ignoreEvent = (data, callback) => fetch('/eventDispatch/ignore', {
+  callback,
+  reqBody: data
+})
+// 巡查上报删除
+export const deleteEvent = (data, callback) => fetch('/eventDispatch/deleteEvent', {
+  callback,
+  reqBody: data
+})
+// 巡查上报修改
+export const modEvent = (data, callback) => fetch('/eventDispatch/modEvent', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报列表
+export const findEvent = (data, callback) => fetch('/eventDispatch/findEvent', {
+  callback,
+  reqBody: data
+})
+// 巡查上报分派
+export const allotEvent = (data, callback) => fetch('/eventDispatch/assign', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报申请延期
+export const applyDefer = (data, callback) => fetch('/eventDispatch/addApplyDefer', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报延期审核
+export const checkApplyDefer = (data, callback) => fetch('/eventDispatch/checkApplyDefer', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报归档
+export const closeAFile = (data, callback) => fetch('/eventDispatch/closeAFile', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报处理
+export const addHandle = (data, callback) => fetch('/eventDispatch/addHandle', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报驳回(重新处理)
+export const rejectEvent = (data, callback) => fetch('/eventDispatch/reject', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报详情
+export const getEventDetails = (data, callback) => fetch('/eventDispatch/getEventDetails', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报读取记录
+export const readEventInfo = (data, callback) => fetch('/eventDispatch/readEventInfo', {
+  callback,
+  reqBody: data
+})
+
+// 巡查上报扣分
+export const deductionDetail = (data, callback) => fetch('/eventDispatch/deductionDetails', {
+  callback,
+  reqBody: data
+})
+// 建设意见回复
+export const addReply = (data, callback) => fetch('/eventDispatch/addReply', {
+  callback,
+  reqBody: data
+})
+// 查询设施信息列表
+export const qryFcltList = (data, callback) => fetch('/fclt/qryFcltList', {
+  callback,
+  reqBody: data
+})
+// 修改设施信息
+export const modFcltInfo = (data, callback) => fetch('/fclt/modFcltInfo', {
+  callback,
+  reqBody: data
+})
+// 验证设施信息是否重复
+export const checkFcltInfo = (data, callback) => fetch('/fclt/checkFcltInfo', {
+  callback,
+  reqBody: data
+})
+// 添加设施信息
+export const addFcltInfo = (data, callback) => fetch('/fclt/addFcltInfo', {
+  callback,
+  reqBody: data
+})
+// 删除设施信息
+export const delFcltInfo = (data, callback) => fetch('/fclt/delFcltInfo', {
+  callback,
+  reqBody: data
+})
+// 获取视频，音频地址
+export const urlView = (data, callback) => fetch('/file/urlView', {
+  callback,
+  reqBody: data
+})
+
+// 督察详情
+export const workQualityList = (data, callback) => fetch('/wCheck/workQualityList', {
+  callback,
+  reqBody: data
+})
+
+// 通过部门id返回该部门及其子部门
+export const getDeptSid = (data, callback) => fetch('/department/getDeptSid', {
+  callback,
+  reqBody: data
+})
+
+// 监控详情
+export const getFcltInfobyId = (data, callback) => fetch('/sanitation/getFcltInfoById', {
+  callback,
+  reqBody: data
+})
+
+// 公厕详情
+export const getToiletDetail = (data, callback) => fetch('/realTimeProtectionService/getObjectInfo', {
+  callback,
+  reqBody: data
+})
+
+// 部门考勤
+export const qryAttendRecordHead = (data, callback) => fetch('/attend/qryAttendRecordHead', {
+  callback,
+  reqBody: data
+})
+
+// 部门考勤详情
+export const qryAttendRecordDetail = (data, callback) => fetch('/attend/qryAttendRecordDetail', {
+  callback,
+  reqBody: data
+})
+
+// 获取视频链接
+export const findCenterServerUrl = (data, callback) => fetch('/cs/findCenterServerUrl', {
+  callback,
+  reqBody: data
+})
+
+// 获取视频通道名称
+export const findVideochannelName = (data, callback) => fetch('/cs/findVideochannelName ', {
+  callback,
+  reqBody: data
+})
+// 获取视频通道
+export const findVideoTree = (data, callback) => fetch('/department/findVideoTree', {
+  callback,
+  reqBody: data
+})
+// 首页部分
+// 获取实时车辆状态
+export const busLists = (data, callback) => fetch('/sanitation/vehicleRealTimeDataList', {
+  callback,
+  reqBody: data
+})
+// 获取车辆或者人员总数
+export const busOrPersonCount = (data, callback) => fetch('/person/personAndCarSum', {
+  callback,
+  reqBody: data
+})
+// 获取当日车辆状态
+export const busDayLists = (data, callback) => fetch('/sanitation/currDayCarDataCount', {
+  callback,
+  reqBody: data
+})
+// 获取人员实时状态
+export const peopleLists = (data, callback) => fetch('/sanitation/personRealTimeData', {
+  callback,
+  reqBody: data
+})
+// 获取人员状态总数
+export const peopleCount = (data, callback) => fetch('/person/personList', {
+  callback,
+  reqBody: data
+})
+// 获取人员当日状态
+export const peopleDayLists = (data, callback) => fetch('/sanitation/personCurrDayAttend', {
+  callback,
+  reqBody: data
+})
+// 获取垃圾桶点清运情况
+export const trashDotLists = (data, callback) => fetch('/sanitation/transportWorkRealTimeCount', {
+  callback,
+  reqBody: data
+})
+// 智慧垃圾桶情况
+export const wisdomTrash = (data, callback) => fetch('/sanitation/mintpassRubbishRealTime', {
+  callback,
+  reqBody: data
+})
+// 智慧公厕情况
+export const wisdomToilet = (data, callback) => fetch('/sanitation/mintpassPtRealTimeCount', {
+  callback,
+  reqBody: data
+})
+// 获取最新事件9条件
+export const newEventsList = (data, callback) => fetch('/mobile/findEventOfTheLatest9Test', {
+  callback,
+  reqBody: data
+})
+// 获取当日事件
+export const nowEventsList = (data, callback) => fetch('/mobile/findEventOfToday', {
+  callback,
+  reqBody: data
+})
+
+// 当日事件汇总接口
+export const eventsCollect = (data, callback) => fetch('/mobile/findEventSummaryOfToday', {
+  callback,
+  reqBody: data
+})
+
+// 获取音频和视频路径
+export const videoUrlView = (data, callback) => fetch('/file/urlView', {
+  callback,
+  reqBody: data
+})
+
+// 获取考核方式assessmentBasis/assessTypeMap
+// export const assessTypeMap = (data, callback) => fetch('/assessmentBasis/assessTypeMap', {
+//   callback,
+//   reqBody: data
+// })
+export const assessTypeMap = (data, callback) => fetch('/assessmentBasis/getAssessmentStandardById', {
+  callback,
+  reqBody: data
+})
+// 获取考核方式下拉列表assessmentBasis/getAssessmentByObject
+export const assessTypeList = (data, callback) => fetch('/assessmentBasis/getAssessmentByObject', {
+  callback,
+  reqBody: data
+})
+
+// 督察记录
+export const assessmentList = (data, callback) => fetch('/assessmentBasis/assessmentSupervisionRecordList', {
+  callback,
+  reqBody: data
+})
+// 督察记录删除
+export const delAssessRecord = (data, callback) => fetch('/assessmentBasis/delAssessmentSupervisionRecord', {
+  callback,
+  reqBody: data
+})
+// 添加督察记录
+export const addAssessRecord = (data, callback) => fetch('/assessmentBasis/addAssessmentSupervisionRecord', {
+  callback,
+  reqBody: data
+})
+// 修改督察记录
+export const modAssessRecord = (data, callback) => fetch('/assessmentBasis/modAssessmentSupervisionRecordArr', {
+  callback,
+  reqBody: data
+})
+// 工作台监控管理图标
+export const monitoreIcon = (data, callback) => fetch('/sanitation/fcltTypeCountList', {
+  callback,
+  reqBody: data
+})
+// 获取系统信息
+export const getSysInfo = (data, callback) => fetch('/sysAccess/sysAccessConfigByCode', {
+  callback,
+  reqBody: data
+})
+
+// 缓存数据字典集合
+export const setSysDicMap = async (callback) => {
+  await sysDicMap({}, (res) => {
+    setStore('sysDicMap', res.data)
+    callback && callback()
+  })
+}
+
+// 缓存问题类型字典
+export const beforeEnterAuth = (to, from, next) => {
+  let user = JSON.parse(getStore('user'))
+  if (user && user.userType) {
+    next()
+  } else {
+    next('/login')
+  }
+}
+// 获取用户关注各类事件的列表
+export const getMsgListByUser = (data, callback) => fetch('/sanitation/getMsgListByUser', {
+  callback,
+  reqBody: data
+})
+// 消息已读未读状态改变
+export const updateMsgReadType = (data, callback) => fetch('/sanitation/updateMsgReadType', {
+  callback,
+  reqBody: data
+})
+// 问题类型大类小类联动
+export const getQuestionTyp = async (callback) => {
+  let arr = []
+  await queryQuestionType({
+    dicType: 'workType'
+  }, (res) => {
+    if (Object.keys(res.data).length > 0) {
+      Object.keys(res.data).forEach((key, index) => {
+        arr[index] = {
+          id: key.split(',')[1],
+          dicName: key.split(',')[0],
+          child: []
+        }
+        if (res.data[key].length > 0) {
+          res.data[key].forEach((item, index2) => {
+            arr[index].child[index2] = {
+              id: item.split(',')[1],
+              dicName: item.split(',')[0]
+            }
+          })
+        }
+      })
+    }
+    callback && callback(arr)
+  })
+}
+// 设施类型大类小类联动
+export const getFcltType = async (callback) => {
+  let arr = []
+  await queryFcltType({}, (res) => {
+    let AllData = res.data.fcltTypeList
+    let treeMapList = AllData.reduce((memo, current) => {
+      memo[current.id] = current
+      return memo
+    }, {})
+    arr = AllData.reduce((arrItem, current) => {
+      let pid = current.pid
+      let parent = treeMapList[pid]
+      if (parent) {
+        parent.child ? parent.child.push(current) : parent.child = [current]
+      } else if (pid === '0') {
+        arrItem.push(current)
+      }
+      return arrItem
+    }, [])
+    callback && callback(arr)
+  })
+}
+// 获取父子级数据联动
+export const getEventType = async (type, callback, subType) => {
+  let arr = []
+  await setSysDicMap(() => {
+    let eventType = getStore('sysDicMap') ? JSON.parse(getStore('sysDicMap'))[type] : {}
+    let params = subType | ''
+    queryDataDictionary(params, (res) => {
+      if (Object.keys(eventType).length > 0) {
+        Object.keys(eventType).forEach((key, index) => {
+          arr[index] = {
+            id: key,
+            dicName: eventType[key],
+            child: []
+          }
+          if (res.data.length > 0) {
+            res.data.forEach((item) => {
+              if (item.pid === key) {
+                arr[index].child.push(item)
+              }
+            })
+          }
+        })
+      }
+      callback && callback(arr)
+    })
+  })
+}

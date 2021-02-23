@@ -1,0 +1,117 @@
+.applay {
+    padding: 130px 0px 0;
+    font-size: 28px;
+    background-color: rgb(247, 247, 247);
+    .header-bar {
+        height: 128px;
+        .right-text {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+    }
+    .form-box {
+        .help {
+            padding: 20px 36px;
+        }
+        .title { 
+            font-size: 24px;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            padding: 20px 25px;
+            color: #B0B2B8;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            img {
+                width: 28px;
+                height: 28px;
+                padding-right: 5px;
+            }
+        }
+        .selector-box {
+            padding:20px 25px;
+        }
+        .title-item {
+            font-size: 24px;
+            color: #999;
+            padding: 20px 25px 0px;
+        }
+        .change-box {
+            padding: 20px 25px;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            .timeText {
+                border: 0;
+                flex: 1;
+            }
+            input:disabled {
+                background-color: #fff;
+            }
+        }
+        .upload {
+            padding: 20px 25px;
+        }
+        .chooseCar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .changeCar-list {
+            padding: 20px 25px;
+            .car-item {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                img {
+                    width: 32px;
+                    height: 32px;
+                }
+                input {
+                    border: none;
+                    padding: 10px 0px;
+                    font-size: 20px;
+                }
+                input::placeholder {
+                    color: rgba(184, 183, 183, 0.63);
+                }
+            }
+            .list-title {
+                font-size: 24px;
+                color: #666;
+            }
+        }
+    }
+    .picker {
+        width: 100%;
+        position: fixed;
+        left: 0;
+        bottom: 0px;
+        z-index: 99;
+    }
+    .form-bottom {
+        padding: 24px 25px;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        button {
+            width: 338px;
+            height: 76px;
+            background: #FFFFFF;
+            border-radius: 8px;
+            border: none;
+        }
+        .submit {
+            background-color: #3378F1;
+            color: #fff;
+        }
+    }
+}

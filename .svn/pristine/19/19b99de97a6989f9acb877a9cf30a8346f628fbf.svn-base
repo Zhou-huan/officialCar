@@ -1,0 +1,84 @@
+<template>
+  <div class="changeCar">
+    <header-bar bacColor="#3378F1">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#fff"/>
+      <div slot="center">
+        <span class="title f32 fBold">选择车辆</span>
+      </div>
+    </header-bar>
+    <div class="content">
+        <div class="search-box">
+            <field v-model="search" placeholder="搜索" :border="false"/><button>搜索</button>
+        </div>
+        <div class="header-title">
+            <ul>
+                <li>车牌号</li>
+                <li>车辆类型</li>
+                <li>车辆单位</li>
+                <li>车载人数</li>
+            </ul>
+        </div>
+        <div class="header-list">
+            <ul>
+                <li @click="setCar(item)" v-for="(item, index) in carList" :key="index">
+                    <span>{{item.carNum}}</span>
+                    <span>{{item.carName}}</span>
+                    <span>{{item.carDep}}</span>
+                    <span>{{item.peopleNum}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon, Field } from 'vant'
+import { setStore } from '@/libs/util'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Field
+  },
+  data () {
+    return {
+      search: '',
+      carList: [
+        { carNum: '金12234Rty', carName: '桥车', carDep: '警匪运输', peopleNum: 5, carId: 123123 },
+        { carNum: '金23334Rty', carName: '桥车', carDep: '警匪运输', peopleNum: 5, carId: 12123 },
+        { carNum: '金234Rty', carName: '桥车', carDep: '警匪运输', peopleNum: 35, carId: 23123 },
+        { carNum: '金27734Rty', carName: '桥车', carDep: '警匪运输', peopleNum: 4, carId: 1233 },
+        { carNum: '川Y23994Rty', carName: '桥车', carDep: '警匪运输', peopleNum: 5, carId: 1123 },
+        { carNum: '金23774Rty', carName: '桥车', carDep: '警匪运输', peopleNum: 15, carId: 1323 }
+      ]
+    }
+  },
+  mounted () {
+    let carIds = []
+    this.$store.state.selectCar.forEach((val, index) => {
+      carIds.push(val.carId)
+    })
+    let cars = this.carList
+    cars.forEach((item, index) => {
+      if (carIds.indexOf(item.carId) > 0) {
+        this.carList.splice(index, 1)
+      }
+    })
+  },
+  methods: {
+    toBack () {
+      this.$router.push('/changeIndex')
+    },
+    setCar (item) {
+      setStore('carItem', item)
+      this.$router.push('/changeDriver')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'changeCar';
+</style>

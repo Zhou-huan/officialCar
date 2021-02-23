@@ -1,0 +1,18 @@
+// import axios from 'axios'
+// import { Indicator } from 'mint-ui'
+
+// // http request 拦截器
+// axios.interceptors.request.use(
+//   config => {
+//     Indicator.open()
+//     console.log(111)
+//     console.log(config)
+//     return config
+//   },
+//   err => {
+//     Indicator.close()
+//     console.log(222)
+//     console.log(err)
+//     return Promise.reject(err)
+//   })
+// export default axios

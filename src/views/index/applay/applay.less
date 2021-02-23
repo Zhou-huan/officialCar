@@ -1,0 +1,248 @@
+.applay {
+    padding: 130px 0px 0;
+    font-size: 28px;
+    background-color: rgb(247, 247, 247);
+    .header-bar {
+        height: 128px;
+        .right-text {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+    }
+    .carType-box {
+        position: relative;
+        .carType-title {
+            height: 80px;
+            width: 100%;
+            background-color: #3378F1;
+            color: #fff;
+            line-height: 80px;
+            text-align: center;
+        }
+        ul {
+            padding-bottom: 110px;
+            li {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #eee;
+                padding: 20px;
+                .car-num {
+                    border: 0;
+                    border-bottom: 1px solid #000;
+                    width: 60px;
+                    text-align: center;
+                }
+                button {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    border-color: #3378F1;
+                    margin: 0 10px;
+                    color: #3378F1;
+                    line-height: 30px;
+                    font-size: 40px;
+                }
+                .car-reduce {
+                    color: #666;
+                    border-color: #666;
+                }
+            }
+        }
+        .car-btn {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+        }
+    }
+    .form-box {
+        .address-box {
+            position: relative;
+            .address-list {
+                position: absolute;
+                z-index: 999;
+                top: 4px;
+                left: 20px;
+                min-width: 300px;
+                max-width: 600px;
+                background-color: #eee;
+                border: 1px solid #fff;
+                padding: 0px 20px;
+                li {
+                   overflow: hidden;
+                   white-space: normal;
+                   word-break: break-all;
+                   border-bottom: 1px solid rgb(230, 225, 225);
+                   padding: 10px;
+                }
+            }
+        }
+        .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
+            border-width: 0px;
+        }
+        .van-cell-group {
+            border-bottom: 1px solid #eee;
+        }
+        .van-cell::after {
+            border: 0;
+        }
+        .help {
+            padding: 0px 36px 10px;
+        }
+        .title { 
+            font-size: 24px;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            padding: 20px 25px;
+            color: #B0B2B8;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            img {
+                width: 28px;
+                height: 28px;
+                padding-right: 5px;
+            }
+        }
+        .selector-box {
+            padding:20px 25px;
+        }
+        .leader-names {
+            padding: 0px 36px 10px;
+            span {
+                margin-right: 10px;
+            }
+        }
+        .title-item {
+            font-size: 24px;
+            color: #999;
+            padding: 20px 25px 0px;
+        }
+        .title-other {
+            padding: 20px 25px;
+            span {
+                display: inline-block;
+                padding-right: 40px;
+            }
+        }
+        .change-box {
+            padding: 20px 25px;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            .timeText {
+                font-size: 24px;
+                border: 0;
+                flex: 1;
+                resize:none; // 去掉右下角的三角
+            }
+            input:disabled {
+                background-color: #fff;
+            }
+            textarea:disabled {
+                background-color: #fff;
+            }
+        }
+        .upload {
+            padding: 20px 25px;
+        }
+        .chooseCar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .changeCar-list {
+            padding: 20px 25px;
+            .car-item {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                img {
+                    width: 32px;
+                    height: 32px;
+                }
+                input {
+                    border: none;
+                    padding: 10px 0px;
+                    font-size: 20px;
+                }
+                input::placeholder {
+                    color: rgba(184, 183, 183, 0.63);
+                }
+            }
+            .list-title {
+                font-size: 24px;
+                color: #666;
+            }
+        }
+        .carList {
+            .carType-content {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 10px 36px;
+                p {
+                    padding: 5px 20px;
+                }
+            }
+        }
+        .img-add {
+            width: 40px;
+            height: 40px;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+    }
+    .picker {
+        width: 100%;
+        position: fixed;
+        left: 0;
+        bottom: 0px;
+        z-index: 99;
+    }
+    .form-bottom {
+        padding: 24px 25px;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        button {
+            width: 338px;
+            height: 76px;
+            background: #FFFFFF;
+            border-radius: 8px;
+            border: none;
+        }
+        .submit {
+            background-color: #3378F1;
+            color: #fff;
+        }
+    }
+    // 地图框
+    .amap-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        height: 100%;
+        height: 100%;
+    }
+    // 树结构
+    .tree-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        height: 100%;
+        height: 100%;
+    }
+}

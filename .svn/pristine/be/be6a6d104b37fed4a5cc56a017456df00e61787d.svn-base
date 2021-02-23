@@ -1,0 +1,83 @@
+.login {
+    height: 100%;
+    width: 100%;
+    background: #EBF2F5 url('../../assets/images/login_bg.png') center 600px no-repeat;
+    background-size: 750px 700px;
+    padding-top: 270px;
+    box-sizing: border-box;
+    .form-box {
+        width: 622px;
+        height: 680px;
+        background: #FFFFFF url('../../assets/images/login_bg1.png') center top no-repeat;
+        background-size: 622px 135px;
+        box-shadow: 4px 7px 37px 3px rgba(21, 128, 193, 0.1);
+        border-radius: 10px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 0 60px;
+        box-sizing: border-box;
+        .login-icon {
+            width: 144px;
+            height: 144px;
+            margin-top: -70px;
+        }
+        .filed-box {
+            height: 80px;
+            border: 1px solid #D2D2D2;
+            border-radius: 8px;
+            margin: 60px auto 0;
+            display: flex;
+            align-items: center;
+            .van-cell {
+                background-color: transparent;
+                padding-left:0;
+                /deep/.van-field__control {
+                    font-size: 28px;
+                }
+            }
+            .field-pwd {
+                position: relative;
+                left: -16px;
+            }
+            .icon-common {
+                width: 35px;
+                height: 35px;
+                color: #999;
+                padding: 0 20px;
+            }   
+        }
+        .login-bottom {
+            width: 480px;
+            margin: 34px auto 54px;
+            font-size: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            color: #999;
+            /deep/.van-checkbox__label {
+                font-size: 28px !important;
+            }
+            span {
+                color: #3378F1;
+                font-size: 28px;
+            }
+        }
+        .van-button--normal {
+            width: 480px;
+            background-color: #3378F1;
+            .van-button__text {
+                font-size: 28px;
+            }
+        }
+    }
+    .form-bottom {
+        width: 293px;
+        height: 28px;
+        font-size: 28px;
+        font-family: Microsoft YaHei;
+        font-weight: 400;
+        color: #333333;
+        opacity: 0.65;
+        margin: 280px auto 0;
+    }
+}

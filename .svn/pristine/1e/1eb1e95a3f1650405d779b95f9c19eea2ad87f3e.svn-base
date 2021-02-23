@@ -1,0 +1,184 @@
+<template>
+  <div class="selector"  v-clickoutside="close">
+    <p class="value" @click="toList($event)">
+      <span>{{currentVal[valueMap[1]]}}</span>
+      <img src="@/assets/images/applay_xiala.png" alt="" v-if="isShowIcon" class="icon-img">
+    </p>
+    <transition-group name="vux-actionsheet-mask">
+        <ul class="select-list shadow2" v-show="isShowList && options.length > 0" :style="styleCnt" :key="'yes'">
+          <li v-for="(item, index) in options" :key="index" @click="toClick(item)">{{item[valueMap[1]]}}</li>
+        </ul>
+        <p class="select-list shadow" v-if="isShowList && options.length === 0" :key="'no'">无数据</p>
+    </transition-group>
+  </div>
+</template>
+<script>
+import $ from 'jquery'
+export default {
+  name: 'selector',
+  props: {
+    value: { // 当前选中值(id)
+      type: Number,
+      default: 0
+    },
+    options: { // 列表数据
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    valueMap: { // 数据格式
+      type: Array,
+      default () {
+        return ['value', 'name']
+      }
+    },
+    showList: { // 是否显示下拉框
+      type: Boolean,
+      default: false
+    },
+    isShowIcon: { // 是否需要箭头图标
+      type: Boolean,
+      default: true
+    },
+    index: { // 当前组件所在索引
+      type: Number,
+      default: 0
+    },
+    isClick: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data () {
+    return {
+      isShowList: false,
+      currentVal: {},
+      styleCnt: {}
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.isShowList = this.showList
+      if (this.value !== 0) {
+        this.getShowTxt()
+      } else {
+        this.currentVal = this.options.length > 0 ? this.options[0] : {}
+      }
+    })
+  },
+  methods: {
+    toClick (item) {
+      this.isShowList = false
+      this.currentVal = item
+      this.$emit('change', item, this.index)
+    },
+    toList (e) {
+      if (this.isClick) {
+        this.isShowList = !this.isShowList
+        let h = document.documentElement.clientHeight - e.clientY
+        var boxH = $('.select-list').height()
+        var top = (boxH + 88 * 2) / 100 + 'rem'
+        if (boxH < h) {
+          this.styleCnt = {
+            top: '.88rem'
+          }
+        } else {
+          this.styleCnt = {
+            top: '-' + top
+          }
+        }
+      } else {
+        this.$emit('banClick')
+      }
+    },
+    getShowTxt () {
+      this.options.forEach((item) => {
+        if (item[this.valueMap[0]] === this.value) {
+          this.currentVal = item
+        }
+      })
+    },
+    close () {
+      this.isShowList = false
+    }
+  },
+  watch: {
+    options () {
+      if (this.value) {
+        this.getShowTxt()
+      } else {
+        this.currentVal = this.options.length > 0 ? this.options[0] : {}
+      }
+    },
+    showList () {
+      this.isShowList = this.showList
+    },
+    value (val) {
+      this.getShowTxt()
+    }
+  }
+}
+</script>
+<style lang="less">
+  .selector{
+    position: relative;
+    flex-grow: 1;
+    padding-top: 5px;
+    .icon-img {
+      width: 44px;
+      height: 36px;
+    }
+    .value{
+      height: 47px;
+      font-size:24px;
+      font-weight:500;
+      color:#454648;
+      display: flex;
+      line-height: 1.4;
+      span{
+        display: inline-block;
+        width: auto;
+        min-width: 70px;
+        flex-grow: 1;
+      }
+      .iconfont{
+        font-size: 24px;
+        color: #2D69FF;
+      }
+    }
+    .select-list{
+
+      position: absolute;
+      background: #eee;
+      top: 88px;
+      left: 0;
+      z-index: 99;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      max-height: 500px;
+      overflow-y: auto;
+      li{
+        min-width: 150px;
+        font-size: 24px;
+        color: #333;
+        padding: 25px 20px;
+        box-sizing: border-box;
+        border-top: 1px solid #E0E5ED;
+        text-align: left;
+        &:hover {
+          background: #2D69FF;
+          color: #fff;
+        }
+        &:first-child{
+          border: 0;
+        }
+      }
+    }
+    p.select-list{
+      font-size: 24px;
+      padding: 10px;
+    }
+  }
+</style>

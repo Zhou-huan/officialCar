@@ -1,0 +1,45 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    applayData: {},
+    sendCarData: '', // 派车时车辆的id和当前状态
+    carpoolData: [], // 选择可拼车的数据
+    fleetData: [], // 选择车队的数据
+    selectCar: [], // 派车时派发的车辆数据
+    orderSendData: [] // 派车时需要的订单信息
+  },
+  mutations: {
+    setApplayData (state, formData) {
+      state.applayData = formData
+    },
+    setCarpool (state, payload) {
+      state.carpoolData = payload
+    },
+    setFleet (state, payload) {
+      state.fleetData = payload
+    },
+    setSendCar (state, payload) {
+      state.sendCarData = payload
+    },
+    setSelectCar (state, payload) {
+      state.selectCar.push(payload)
+    },
+    setOrderData (state, payload) {
+      state.orderSendData = payload
+    }
+  },
+  actions: {
+    SET_CARPOOL ({ commit }, payload) {
+      commit('setCarpool', payload)
+    },
+    SET_FLEET ({ commit }, payload) {
+      commit('setFleet', payload)
+    }
+  },
+  modules: {
+  }
+})

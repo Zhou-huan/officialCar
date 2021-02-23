@@ -1,0 +1,155 @@
+<template>
+  <div class="detail">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">归队详情</span>
+      </div>
+    </header-bar>
+    <div class="title"><span>订单号：20201030225512154</span><c-button class="btn-hollow yellow">待调度</c-button></div>
+    <div class="root">
+        <h4>市委一号西门</h4>
+        <p>2020-11-30 15:00 周一<img src="@/assets/images/list-chu.png" alt=""></p>
+        <div class="root-center">
+          <img src="@/assets/images/list-jiantou.png" alt="">
+          <span class="f24">非全天用车</span>
+        </div>
+        <h4>北宿镇、太平镇、中心店镇</h4>
+        <p>2020-12-01 15:00 周二<img src="@/assets/images/list-gui.png" alt=""></p>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+        <div class="fC999">申请人：<span class="fC333 fBold">王云甲</span></div>
+        <span>18044448888</span>
+      </div>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+          <div class="fC999">用车人：<span class="fC333 fBold">王宝器</span></div>
+        <span>18044448888</span>
+      </div>
+      <div>
+        <p>车牌号：川Y234567</p>
+        <span>乘车人数：2人</span>
+      </div>
+    </div>
+    <ul class="detail-list f28">
+      <li>
+        <span class="fCccc">用车事由：</span>督导检查各镇路域环境
+      </li>
+      <li>
+        <span class="fCccc">用车部门：</span> 邹城市政府办
+      </li>
+    </ul>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_geren.png" alt="">订单补充</div>
+        <cell-group>
+          <p class="title-item">起始路码</p>
+          <field v-model="form.apply_use_time_str" placeholder="请输入起始路码"/>
+        </cell-group>
+        <cell-group>
+          <p class="title-item">终止路码</p>
+          <field v-model="form.apply_use_time_str"  placeholder="请输入终止路码"/>
+        </cell-group>
+        <cell-group>
+            <p class="title-item" style="text-align:right">行驶里程：{{0}}</p>
+           <p class="title-item">出车天数</p>
+          <field v-model="form.apply_use_time_str" placeholder="请输入出车天数"/>
+        </cell-group>
+        <cell-group class="gps-box">
+          <p class="title-item">GPS里程</p>
+          <field v-model="form.apply_use_time_str" placeholder="请输入GPS里程"/>
+          <button class="get-gps blue">获取</button>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">行驶备注</p>
+          <field v-model="form.apply_use_time_str" placeholder="请输入行驶备注"/>
+        </cell-group>
+      </div>
+    <div class="btn-box">
+      <div class="left">
+        全天包车结算
+      </div>
+      <div class="right">
+        <button>归队</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import CButton from '@/components/button/button'
+import { Icon, CellGroup, Field } from 'vant'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    CButton,
+    CellGroup,
+    Field
+  },
+  data () {
+    return {
+      form: {
+        apply_use_time_str: '',
+        apply_back_time_str: ''
+      }
+    }
+  },
+  methods: {
+    toBack () {
+      this.$router.push({
+        path: '/rejoinList',
+        query: {}
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+    .form-box {
+        margin-top: 20px;
+        .help {
+            padding: 20px 0;
+        }
+        .title {
+            font-size: 28px;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            padding: 20px 0;
+            color: #B0B2B8;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            img {
+                width: 28px;
+                height: 28px;
+                padding-right: 5px;
+            }
+        }
+        .title-item {
+            font-size: 24px;
+            color: #999;
+            padding: 20px 0 0px;
+        }
+        .van-cell {
+            padding: 20px 0;
+        }
+        .gps-box {
+            position: relative;
+            .get-gps {
+                width: 88px;
+                height: 44px;
+                border: 1px solid #3378F1;
+                border-radius: 22px;
+                position: absolute;
+                right: 30px;
+                top: 45px;
+            }
+        }
+    }
+@import '../../../assets/css/commonDetail.less';
+</style>

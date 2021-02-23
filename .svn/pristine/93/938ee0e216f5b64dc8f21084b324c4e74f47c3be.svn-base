@@ -1,0 +1,93 @@
+<template>
+  <div class="detail">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">调度详情</span>
+      </div>
+    </header-bar>
+    <div class="title"><span>订单号：20201030225512154</span><c-button class="btn-hollow yellow">待调度</c-button></div>
+    <div class="root">
+        <h4>市委一号西门</h4>
+        <p>2020-11-30 15:00 周一<img src="@/assets/images/list-chu.png" alt=""></p>
+        <div class="root-center">
+          <img src="@/assets/images/list-jiantou.png" alt="">
+          <span class="f24">非全天用车</span>
+        </div>
+        <h4>北宿镇、太平镇、中心店镇</h4>
+        <p>2020-12-01 15:00 周二<img src="@/assets/images/list-gui.png" alt=""></p>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+        <div class="fC999">申请人：<span class="fC333 fBold">王云甲</span></div>
+        <span>18044448888</span>
+      </div>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+          <div class="fC999">用车人：<span class="fC333 fBold">王宝器</span></div>
+        <span>18044448888</span>
+      </div>
+      <div>
+        <p>车牌号：川Y234567</p>
+        <span>乘车人数：2人</span>
+      </div>
+    </div>
+    <ul class="detail-list f28">
+      <li>
+        <span class="fCccc">用车事由：</span>督导检查各镇路域环境
+      </li>
+      <li>
+        <span class="fCccc">用车部门：</span> 邹城市政府办
+      </li>
+      <li>
+        <span class="fCccc">用车性质：</span>车补区域外的调研考察、督导检查、考核验收等
+      </li>
+      <li>
+        <span class="fCccc">用车区域：</span>交通补贴区域外
+      </li>
+      <li>
+        <span class="fCccc">备注信息：</span>交通补贴区域外
+      </li>
+    </ul>
+    <div class="btn-box">
+      <div class="left">
+        <img src="@/assets/images/list-feedback.png" alt="">反馈
+      </div>
+      <div class="right">
+        <button>选择车队</button>
+        <button>派车</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import CButton from '@/components/button/button'
+import { Icon } from 'vant'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    CButton
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    toBack () {
+      this.$router.push({
+        path: '/CarExamineList',
+        query: {}
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import '../../../assets/css/commonDetail.less';
+</style>

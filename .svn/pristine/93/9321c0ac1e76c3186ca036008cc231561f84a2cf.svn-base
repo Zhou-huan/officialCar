@@ -1,0 +1,111 @@
+<template>
+  <div class="choose-wrapper">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">选择拼车</span>
+      </div>
+    </header-bar>
+    <div class="choose-cnt">
+      <checkbox-group v-model="chooseArr">
+        <checkbox v-for="(item) in list" :key="item.id" :name="item.id">
+          <p class="no">订单号：{{ item.yong_che_no }}</p>
+          <h2>
+            <label>{{ item.apply_use_address_1 }}<template v-if="item.apply_use_address_2">({{ item.apply_use_address_2}})</template></label>
+            <span>
+              {{ item.apply_use_time_str }} {{ item.apply_use_time_str | getWeek}}
+              <samp class="icon green">出</samp>
+            </span>
+          </h2>
+          <h2>
+            <label>{{ item.apply_destination_1 }}<template v-if="item.apply_destination_2">({{ item.apply_destination_2 }})</template></label>
+            <span>
+              {{ item.apply_back_time_str }} {{ item.apply_back_time_str | getWeek}}
+              <samp class="icon red">归</samp>
+            </span>
+          </h2>
+          <p>用车部门：{{ item.apply_dept_name}}</p>
+          <p>乘车人：{{ item.yong_che_ren }}</p>
+          <p>联系电话：{{ item.apply_use_phone}}</p>
+        </checkbox>
+      </checkbox-group>
+    </div>
+    <div class="bottom">
+      <span class="num">&nbsp;<template v-if="chooseArr.length">已选<em>{{ chooseArr.length }}</em>个订单</template></span>
+      <Button @click="toOpr" type="info">确认</Button>
+    </div>
+  </div>
+</template>
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { getMatchingApplyInfo } from '@/libs/const'
+import { Icon, Checkbox, CheckboxGroup, Button } from 'vant'
+import moment from 'moment'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Checkbox,
+    CheckboxGroup,
+    Button
+  },
+  data () {
+    return {
+      list: [],
+      idList: [],
+      chooseData: [],
+      params: this.$route.query,
+      chooseArr: []
+    }
+  },
+  filters: {
+    getWeek (val) {
+      return moment(val).format('dddd')
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.getList()
+    })
+  },
+  methods: {
+    toBack () {
+      this.$router.push({
+        path: '/dispatchDetail',
+        query: {
+          id: this.params.applyId
+        }
+      })
+    },
+    async getList () {
+      await getMatchingApplyInfo({
+        applyId: this.params.applyId
+      }, (res) => {
+        this.list = res.rows
+        this.list.some((item, index) => {
+          this.idList[index] = item.id
+        })
+      })
+    },
+    toOpr () {
+      this.chooseData = []
+      if (this.chooseArr.length) {
+        this.chooseArr.some((item) => {
+          let ind = this.idList.indexOf(item)
+          if (ind > -1) {
+            this.chooseData.push({
+              id: item,
+              yongNo: this.list[ind].yong_che_no
+            })
+          }
+        })
+      }
+      this.$store.dispatch('SET_CARPOOL', this.chooseData)
+      this.toBack()
+    }
+  }
+}
+</script>
+<style lang="less">
+  @import "choose";
+</style>

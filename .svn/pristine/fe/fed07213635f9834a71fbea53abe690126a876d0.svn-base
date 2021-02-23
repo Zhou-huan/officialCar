@@ -1,0 +1,175 @@
+/** 常量文件 */
+import { fetch } from './fetch'
+// import { getStore, setStore } from './util'
+export const lng = '104.077495'
+export const lat = '30.653311'
+export const mapKey = '78e72d25e9e1beb6de870fafe19764e2'
+let viewUrl = process.env.VUE_APP_URL.split('/')
+export const appViewUrl = viewUrl[0] + '//' + viewUrl[2] + '/'
+// 权限码
+export const privilegeCode = {
+  index: { // 首页
+    tree: '525', // 树结构
+    workbench: '', // 工作台
+    newEvents: '529', // 最新事件
+    events: '3', // 当日事件和今日汇总事件
+    patrol: '207', // 巡查上报
+    urge: '264', // 问题督办
+    assuse: '243', // 公众投诉
+    repairs: '278', // 设施报修
+    addpatrol: '208', // 新增巡查
+    addrepairs: '279', // 新增报修
+    addurge: '265', // 新增督办
+    addflct: '131', // 新增设施
+    addsupervise: '459', // 新增督查
+    carStatus: '554', // 车辆轨迹
+    menStatus: '557', // 人员轨迹
+    trashClear: '547', // 垃圾清运
+    Imonitore: '548' // 智能监测
+  },
+  workbeach: { // 工作台
+    people: '531', // 人员
+    car: '530', // 车辆
+    publicToilet: '533', // 公厕
+    transfer: '534', // 中转站
+    dealStation: '535', // 处理站
+    collectStation: '538', // 收集站
+    collectDot: '539', // 收集点
+    trash: '537', // 垃圾桶
+    patrol: '28', // 巡查上报
+    issue: '204', // 问题投诉
+    opinions: '205', // 建设意见
+    supervise: '32', // 问题督办
+    facilities: '33', // 设施维修
+    check: '39', // 考核管理
+    salary: '558' // 考勤
+  },
+  mine: { // 个人中心
+    'update-password': '421' // 修改密码
+  },
+  patrol: { // 巡查上报
+    list: '207', // 列表
+    add: '208', // 新增
+    mod: '209', // 修改
+    detail: '211', // 详情
+    reg: '213', // 立案
+    allot: '214', // 分派
+    ignore: '219', // 忽略
+    sign: '212', // 签到
+    'allot-mod': '214', // 改派
+    deal: '217', // 处理
+    'deal-mod': '691', // 重新处理
+    delay: '215', // 申请延期
+    'delay-check': '216', // 延期审核
+    discard: '221', // 废弃
+    recover: '222', // 恢复
+    urge: '218', // 催办
+    confirm: '220', // 结案
+    del: '210', // 删除
+    file: '223', // 归档
+    deduct: '576' // 扣分
+  },
+  supervise: { // 督办下发
+    list: '264', // 列表
+    add: '265', // 新增
+    mod: '361', // 修改
+    detail: '266', // 详情
+    sign: '267', // 签到
+    deal: '271', // 处理
+    'deal-mod': '693', // 重新处理
+    delay: '269', // 申请延期
+    'delay-check': '270', // 延期审核
+    discard: '274', // 废弃
+    recover: '275', // 恢复
+    urge: '272', // 催办
+    confirm: '273', // 结案
+    del: '578', // 删除
+    file: '276', // 归档
+    deduct: '577', // 扣分
+    'allot-mod': '268', // 改派
+    allot: '268'
+  },
+  facilities: { // 设施维修
+    list: '278', // 列表
+    add: '279', // 新增
+    mod: '570', // 修改
+    detail: '280', // 详情
+    reg: '572', // 立案
+    allot: '282', // 分派
+    ignore: '574', // 忽略
+    sign: '281', // 签到
+    'allot-mod': '282', // 改派
+    deal: '285', // 处理
+    'deal-mod': '694', // 重新处理
+    delay: '283', // 申请延期
+    'delay-check': '284', // 延期审核
+    discard: '288', // 废弃
+    recover: '289', // 恢复
+    urge: '286', // 催办
+    confirm: '287', // 结案
+    del: '579', // 删除
+    file: '290' // 归档
+  },
+  Iscomplaint: { // 问题投诉
+    list: '243', // 列表
+    add: '244', // 新增
+    mod: '245', // 修改
+    detail: '246', // 详情
+    reg: '248', // 立案
+    allot: '249', // 分派
+    ignore: '254', // 忽略
+    sign: '247', // 签到
+    'allot-mod': '249', // 改派
+    deal: '252', // 处理
+    'deal-mod': '692', // 重新处理
+    delay: '250', // 申请延期
+    'delay-check': '251', // 延期审核
+    discard: '256', // 废弃
+    recover: '257', // 恢复
+    urge: '253', // 催办
+    confirm: '255', // 结案
+    del: '580', // 删除
+    file: '258', // 归档
+    deduct: '581' // 扣分
+  },
+  opinions: { // 建设意见
+    list: '260',
+    ignore: '261',
+    reply: '262',
+    add: '582'
+  },
+  assess: { // 督察
+    list: '21', // 列表
+    mod: '21', // 修改
+    del: '21', // 删除
+    add: '21' // 添加
+  },
+  monitor: { // 监控
+    center: '2' // 监控中心
+  },
+  attendance: { // 考勤
+    dept: '49', // 部门
+    person: '49' // 人员考勤, 排班
+  }
+}
+
+// 登录
+export const login = (data, callback) => fetch('user/loginr_app', {
+  callback,
+  reqBody: data
+})
+// 申请车辆预加载数据
+export const preList = (data, callback) => fetch('applet/replace_app', {
+  callback,
+  reqBody: data
+})
+// 获取指点审核人的任务号
+export const getTask = (data, callback) => fetch('applet/getObjectInfo', {
+  callback,
+  reqBody: data
+})
+// 用车首页
+export const useIndex = (data, callback) => fetch('applet/homeData', {
+  callback,
+  reqBody: data
+})

@@ -1,0 +1,27 @@
+.fCccc {
+    color:#ccc;
+}
+.fC333 {
+    color: #333;
+}
+.f32 {
+    font-size: 32px;
+}
+.f24 {
+    font-size: 24px;
+}
+.f22 {
+    font-size: 22px;
+}
+.f28 {
+    font-size: 28px;
+}
+.f48 {
+    font-size: 48px;
+}
+.fBold {
+    font-weight: bold;
+}
+.green {
+    color: #38CA80;
+}

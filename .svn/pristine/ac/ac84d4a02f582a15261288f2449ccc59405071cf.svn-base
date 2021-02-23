@@ -1,0 +1,198 @@
+<template>
+  <div class="applay">
+      <header-bar>
+        <div slot="left">
+          <span @click="toBack" class="icons">返回</span>
+        </div>
+        <div slot="center">
+          <span class="title">用车申请</span>
+        </div>
+        <div slot="right"><span class="right-text">用车规则</span></div>
+      </header-bar>
+      <div class="form-box">
+        <div class="title"><img src="../../assets/logo.png" alt=""> 个人信息</div>
+        <cell-group>
+           <p class="title-item">姓名</p>
+          <field v-model="value" placeholder="请输入用户名" />
+        </cell-group>
+        <cell-group>
+           <p class="title-item">电话</p>
+          <field v-model="value" placeholder="请输入用户名" />
+        </cell-group>
+        <cell-group>
+          <field v-model="value" label="乘车人数:"/>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="../../assets/logo.png" alt=""> 单位信息</div>
+        <cell-group>
+           <p class="title-item">用车单位</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="../../assets/logo.png" alt=""> 用车计划</div>
+        <cell-group>
+          <p class="title-item">用车性质</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">预计出车时间</p>
+           <div class="change-box">
+             <input v-model="form.time" class="timeText"/><img  @click="changeTime"  src="../../assets/logo.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">预计归队时间</p>
+           <div class="change-box">
+              <input v-model="form.time1" class="timeText"/><img  @click="changeTime1" src="../../assets/logo.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">出发地</p>
+            <div class="change-box">
+              <input v-model="form.place" class="timeText"/><img  @click="changeAddress" src="../../assets/logo.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">目的地</p>
+            <div class="change-box">
+              <input v-model="form.place" class="timeText"/><img  @click="changeAddress" src="../../assets/logo.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">用车区域</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">服务平台</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">用车事由</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="../../assets/logo.png" alt=""> 用车种类</div>
+        <cell-group>
+           <p class="title-item">选择车型</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="../../assets/logo.png" alt=""> 其他</div>
+        <cell-group>
+           <p class="title-item">图片</p>
+          <div class="selector-box">
+            <selector :value="form.level" :options="queLevel" @change="levelChange" :valueMap="['id', 'dicName']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="picker">
+        <datetime-picker
+        v-if="showTime"
+        v-model="currentDate"
+        type="datetime"
+        title="选择完整时间"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="confirmTime"
+        @cancel="cancelTime"
+        />
+        <datetime-picker
+        v-if="showTime1"
+        v-model="currentDate"
+        type="datetime"
+        title="选择完整时间"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="confirmTime1"
+        @cancel="cancelTime"
+        />
+      </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import moment from 'moment'
+import { Field, CellGroup, DatetimePicker } from 'vant'
+import Selector from '@/components/selector/selector'
+export default {
+  components: {
+    HeaderBar,
+    Field,
+    CellGroup,
+    Selector,
+    DatetimePicker
+  },
+  data () {
+    return {
+      value: '111',
+      form: {
+        level: '',
+        time: '2020-11-26 15:47',
+        time1: '2020-11-26 15:47',
+        place: '济宁市任城区红星中路13号'
+      },
+      queLevel: [
+        { id: '1', dicName: '李四23' },
+        { id: '1', dicName: '李四33' },
+        { id: '1', dicName: '李四44' },
+        { id: '1', dicName: '李四555' }
+      ],
+      showTime: false,
+      showTime1: false,
+      minDate: new Date(),
+      maxDate: new Date(2025, 10, 1),
+      currentDate: new Date()
+    }
+  },
+  mounted () {
+    this.form.time = moment(this.form.time).format('YYYY-MM-DD HH:mm')
+  },
+  methods: {
+    toBack () {
+      this.$router.replace('../index')
+    },
+    levelChange () {
+      console.log(111)
+    },
+    confirmTime (value) {
+      this.form.time = moment(value).format('YYYY-MM-DD HH:mm')
+      this.showTime = false
+    },
+    confirmTime1 (value) {
+      this.form.time1 = moment(value).format('YYYY-MM-DD HH:mm')
+      this.showTime1 = false
+    },
+    cancelTime () {
+      this.showTime = false
+      this.showTime1 = false
+    },
+    changeTime () {
+      this.showTime = true
+    },
+    changeTime1 () {
+      this.showTime1 = true
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+     @import 'applay';
+</style>

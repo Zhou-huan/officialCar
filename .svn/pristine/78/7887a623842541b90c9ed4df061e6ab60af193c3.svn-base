@@ -1,0 +1,19 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    applayData: {}
+  },
+  mutations: {
+    setApplayData (state, formData) {
+      state.applayData = formData
+    }
+  },
+  actions: {
+  },
+  modules: {
+  }
+})

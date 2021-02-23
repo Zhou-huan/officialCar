@@ -1,0 +1,172 @@
+<template>
+  <div class="changeCar">
+    <header-bar bacColor="#3378F1">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#fff"/>
+      <div slot="center">
+        <span class="title f32 fBold">选择车辆</span>
+      </div>
+      <div slot="right">
+        <span class="f32 fBold right-title" @click="addCar">添加</span>
+      </div>
+    </header-bar>
+    <div class="content content-index">
+        <div class="header-title">
+            <ul>
+                <li>车牌号</li>
+                <li>车型</li>
+                <li>驾驶员</li>
+            </ul>
+        </div>
+        <div class="header-list">
+            <ul>
+                <li v-for="(val, index) in carPeopleList" :key="index">
+                    <swipe-cell>
+                        <div class="li-item">
+                            <span>{{val.car_num}}</span>
+                            <span>{{val.car_type_name}}</span>
+                            <div class="driver-detail">
+                               <p>{{val.uname}}</p>
+                               <p class="small">【{{val.user_phone}}】</p>
+                            </div>
+                        </div>
+                        <template #right>
+                            <Button square type="danger" text="删除" class="delete-button" @click="delItem(val.id)"/>
+                        </template>
+                    </swipe-cell>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="btn-box">
+        <button @click="doSubmit">确认</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon, SwipeCell, Button } from 'vant'
+import { sendApply } from '@/libs/const'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    SwipeCell,
+    Button
+  },
+  data () {
+    return {
+      search: '',
+      carPeopleList: [],
+      infoList: []
+    }
+  },
+  mounted () {
+    this.carPeopleList = this.$store.state.selectCar
+    this.infoList = this.carPeopleList.map(val => {
+      return {
+        driverId: val.driverId,
+        carId: val.id
+      }
+    })
+  },
+  methods: {
+    toBack () {
+      this.$store.state.selectCar = []
+      this.$router.push({
+        path: '/sendCarList'
+      })
+    },
+    addCar () {
+      this.$router.push('/changeCar')
+    },
+    delItem (id) {
+      let carPeople = this.carPeopleList
+      carPeople.some((val, index) => {
+        if (val.id === id) {
+          this.carPeopleList.splice(index, 1)
+          return true
+        }
+      })
+      this.$store.state.selectCar = this.carPeopleList
+    },
+    doSubmit () {
+      if (this.infoList.length <= 0) {
+        this.$toast({
+          message: '未选择车辆',
+          duration: 1000,
+          className: 'toastStyle'
+        })
+        return
+      }
+      sendApply({
+        applyId: this.$store.state.orderSendData.id,
+        infoList: JSON.stringify(this.infoList)
+      }, res => {
+        this.$toast({
+          message: '操作成功',
+          duration: 1000,
+          className: 'toastStyle',
+          onClose: () => {
+            this.$store.state.selectCar = []
+            this.$router.push('/sendCarList')
+          }
+        })
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.right-title {
+    color: #fff;
+}
+.van-swipe-cell {
+    width: 100%;
+}
+.li-item {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .driver-detail {
+        display: flex;
+        flex-direction: column;
+        p {
+            line-height: 40px;
+        }
+        .small {
+            font-size: 20px;
+
+        }
+    }
+}
+/deep/.van-swipe-cell__wrapper{
+    font-size: 28px;
+}
+/deep/.delete-button{
+    height: 80px;
+    display: block;
+    width: 100%;
+}
+.btn-box {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    button {
+        width: 100%;
+        background: #3378F1;
+        color: #fff;
+        font-size: 32px;
+        border: 0;
+        height: 79px;
+        border-radius: 5px;
+    }
+}
+@import 'changeCar';
+</style>

@@ -1,0 +1,88 @@
+<template>
+  <div class="changeCar">
+    <header-bar bacColor="#3378F1">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#fff"/>
+      <div slot="center">
+        <span class="title f32 fBold">选择驾驶员</span>
+      </div>
+    </header-bar>
+    <div class="content">
+        <div class="search-box">
+            <field v-model="search" placeholder="搜索" :border="false"/><button>搜索</button>
+        </div>
+        <div class="header-title">
+            <ul>
+                <li>姓名</li>
+                <li>单位</li>
+                <li>电话</li>
+                <li>准驾车型</li>
+            </ul>
+        </div>
+        <div class="header-list">
+            <ul>
+                <li @click="setDriver(item)" v-for="(item, index) in driverList" :key="index">
+                    <span>{{item.peopleName}}</span>
+                    <span>{{item.unitName}}</span>
+                    <span>{{item.phone}}</span>
+                    <span>{{item.canCarType}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon, Field } from 'vant'
+import { getStore } from '@/libs/util'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Field
+  },
+  data () {
+    return {
+      search: '',
+      driverList: [
+        { peopleName: '张三1', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 123123 },
+        { peopleName: '张三51', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 1123 },
+        { peopleName: '张三4', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 12123 },
+        { peopleName: '张三561', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 13123 },
+        { peopleName: '张三661', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 123 },
+        { peopleName: '张三761', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 1223 },
+        { peopleName: '张三15', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 12312 },
+        { peopleName: '张三134', unitName: '北京市解放局', phone: '17823456798', canCarType: '小车', driverId: 23 }
+      ]
+    }
+  },
+  mounted () {
+    let driverIds = []
+    this.$store.state.selectCar.forEach((val, index) => {
+      driverIds.push(val.driverId)
+    })
+    let drivers = this.driverList
+    drivers.forEach((item, index) => {
+      if (driverIds.indexOf(item.driverId) > 0) {
+        this.driverList.splice(index, 1)
+      }
+    })
+  },
+  methods: {
+    toBack () {
+      this.$router.push('/changeCar')
+    },
+    setDriver (item) {
+    // 合并车驾驶员项，然后push到vuex中
+      let carPeople = Object.assign(JSON.parse(getStore('carItem')), item)
+      this.$store.commit('setSelectCar', carPeople)
+      this.$router.push('/changeIndex')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'changeCar';
+</style>

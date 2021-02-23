@@ -1,0 +1,99 @@
+.changeCar {
+    padding: 120px 20px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    background-color: rgba(245, 248, 245, 0.925);
+    color: #333;
+    font-size: 24px;
+    .content-header {
+        position: fixed;
+        top: 100px;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        .search-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            .van-cell {
+                border: 1px solid #eee;
+                width: 80%;
+                padding: 10px;
+            }
+            button {
+                width: 18%;
+                height: 70px;
+                color: #fff;
+                background-color: #3378F1;
+                border: 0;
+                border-radius: 5px;
+            }
+        }
+        .header-title {
+            padding-top: 20px;
+            ul {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 28px;
+                font-weight: bold;
+                border-bottom: 1px solid #666;
+                padding-bottom: 20px;
+                li {
+                    text-align: center;
+                    width: 25%;
+                }
+            }
+        }
+    }
+    .content {
+        position: fixed;
+        top: 280px;
+        left: 0;
+        width: 100%;
+        height: 80vh;
+        overflow:scroll;
+        .header-list {
+            ul {
+                padding-bottom: 20px;
+               li {
+                   display: flex;
+                   flex-direction: row;
+                   justify-content: space-between;
+                   text-align: center;
+                    line-height: 80px;
+                    border-bottom: 1px solid #eee;
+                    span {
+                        width: 25%;
+                    }
+               } 
+            }
+        }
+    }
+    .content-index {
+        position: fixed;
+        top: 100px;
+        left: 0;
+        width: 100%;
+        .header-title {
+            padding-top: 20px;
+            ul {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 28px;
+                font-weight: bold;
+                border-bottom: 1px solid #666;
+                padding-bottom: 20px;
+                li {
+                    text-align: center;
+                    width: 25%;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,100 @@
+.sendCar {
+    padding: 130px 36px 120px;
+    background: rgb(242, 245, 244);
+    .icons {
+        color: gray;
+        width: 36px;
+        height: 36px;
+    }
+    .title {
+        color: #333;
+        font-weight: bold;
+    }
+    .banner {
+        width: 680px;
+        height: 144px;
+        margin: 0 auto;
+    }
+    .myCar {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.04);
+        border-radius: 12px;
+        margin: 0 auto;
+        margin-top: 22px;
+        padding: 30px;
+        box-sizing: border-box;
+        ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding-top: 40px;
+            li {
+                text-align: center;
+                h5 {
+                    padding-top: 5px;
+                    font-weight: bold;
+                    font-size: 42px;
+                }
+            }
+        }
+        .myCar-bottom {
+            background: #FAFAFA;
+            border-radius: 4px;
+            margin: 30px auto 0;
+            ul {
+                padding: 20px 0;
+                .circle {
+                    display: inline-block;
+                    width: 12px;
+                    height: 12px;
+                    background: #3378F1;
+                    border-radius: 50%;
+                    margin-right: 10px;
+                }
+                .circle-green {
+                    background-color: #38CA80;
+                }
+            }
+
+        }
+    }
+    .myCar-title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        p {
+           font-size: 22px; 
+           padding-top: 10px;
+        }
+        img {
+            width: 32px;
+            height: 32px;
+        }
+    }
+    .myCar-text {
+        padding-top: 15px;
+    }
+    .sendCar {
+        background: #FFFFFF;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.04);
+        border-radius: 12px;
+        margin-top: 26px;
+        padding: 30px;
+        box-sizing: border-box;
+        .sendCar-list {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding: 26px 0;
+            border-bottom: 1px solid #eee;
+            h5 {
+                padding-top: 10px;
+            }
+        }
+    }
+    .registerCar {
+        .sendCar-list {
+            border-bottom: none;
+        }
+    }
+  }

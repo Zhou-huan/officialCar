@@ -1,0 +1,251 @@
+<template>
+  <div class="useCarList">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">我的归队</span>
+      </div>
+      <div slot="right" class="title-right" @click="filtrate">
+        <img src="@/assets/images/list-filter.png" alt="">
+        <span class="f24 fC333">筛选</span>
+      </div>
+    </header-bar>
+    <tabs v-model="currentIndex" color="#fff" title-active-color="#333" swipeable title-inactive-color="#999" @click="click" style="width: 100%;">
+      <tab v-for="(item, index) in list" :title="item.name" :key="index">
+      </tab>
+    </tabs>
+    <div style="height:90vh;overflow:scroll">
+      <Loadmore :top-method="loadTop"
+                :bottom-method="loadBottom"
+                :bottomAllLoaded="allLoaded"
+                bottomPullText="上拉加载"
+                bottomDropText="加载更多"
+                :autoFill="false"
+                ref="loadmore">
+        <swipe @change="onChange" :initial-swipe="currentIndex" :show-indicators="false">
+          <swipe-item v-for="(item, index) in list" :key="index">
+            <div class="content" v-if="listData.length > 0">
+              <ul class="list-box">
+                <li v-for="(use, ind) in listData" :key="ind" @click="goDetail(use)">
+                  <img :src="use.img_path + use.car_picture" alt="">
+                  <div class="list-center" style="flex-grow: 1;">
+                    <h4 class="f28">{{ use.yong_che_no }}</h4>
+                    <p>用车人：<span class="fC333">{{ use.yong_che_ren }}</span></p>
+                    <p>驾驶员：<span class="blue">{{ use.apply_driver_name }}</span></p>
+                    <p class="nowrap">目的地：<span class="blue">{{ use.apply_destination_1 }}<em v-if="use.apply_destination_2">({{ use.apply_destination_2 }})</em></span></p>
+                    <p class="nowrap" v-if="use.return_time_str">归队时间：<span class="green">{{ use.return_time_str }}</span></p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="no-data-wrapper" v-else>
+              <no-data></no-data>
+            </div>
+          </swipe-item>
+        </swipe>
+      </Loadmore>
+    </div>
+    <!-- 筛选框 -->
+    <Popup
+      v-model="popupVisible"
+      position="right">
+      <div class="filter-box">
+        <h3>筛选<img src="@/assets/images/list-shouqi.png" alt="" @click="closePopup" style="padding-bottom:40px"></h3>
+        <div class="form-box">
+        <checkbox-group v-model="result">
+          <cell-group>
+            <cell
+              v-for="(item, index) in carList"
+              clickable
+              :key="item.id"
+              :title="item.dept_name"
+              @click="toggle(index)"
+            >
+              <template #right-icon>
+                <checkbox :name="item" ref="checkboxes" />
+              </template>
+            </cell>
+          </cell-group>
+        </checkbox-group>
+        </div>
+        <div class="btn-box">
+          <button class="doOk" @click="submit">确定</button>
+        </div>
+      </div>
+    </Popup>
+    <action-sheet v-model="showDateTime">
+      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" v-if="showDateTime" :title="this.timeType === 'start' ? '起始时间' : '截止时间'"></datetime-picker>
+    </action-sheet>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import NoData from '@/components/no-data/no-data'
+import { Icon, Tab, Tabs, Swipe, SwipeItem, DatetimePicker, ActionSheet, Checkbox, CheckboxGroup, CellGroup, Cell } from 'vant'
+import { Loadmore, Popup } from 'mint-ui'
+import 'mint-ui/lib/style.css'
+import { getBackCarList } from '@/libs/const'
+import moment from 'moment'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Tab,
+    Tabs,
+    Loadmore,
+    Swipe,
+    SwipeItem,
+    Popup,
+    DatetimePicker,
+    ActionSheet,
+    Checkbox,
+    CheckboxGroup,
+    CellGroup,
+    Cell,
+    NoData
+  },
+  data () {
+    return {
+      type: this.$route.query.type ? this.$route.query.type : 0,
+      name: '',
+      popupVisible: false,
+      allLoaded: false,
+      currentIndex: this.$route.query.currentIndex ? JSON.parse(this.$route.query.currentIndex) : 0,
+      stsCls: {
+        0: 'yellow',
+        1: 'yellow',
+        2: 'red'
+      },
+      list: [
+        {
+          key: 3,
+          name: '未归队'
+        },
+        {
+          key: 2,
+          name: '已归队'
+        }
+      ],
+      carList: ['a', 'b'],
+      result: [],
+      isLoading: false,
+      form: {
+        limit: 6,
+        offset: 1,
+        convoyIds: '',
+        rejoinflag: 3 // 数据类型
+      },
+      listData: [],
+      showDateTime: false,
+      timeType: ''
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.form.rejoinflag = this.list[this.currentIndex].key
+      this.getList()
+    })
+  },
+  methods: {
+    toggle (index) {
+      this.$refs.checkboxes[index].toggle()
+    },
+    loadTop () {
+      this.form.offset = 1
+      this.getList()
+      this.$refs.loadmore.onTopLoaded()
+    },
+    loadBottom () {
+      this.form.offset += 1
+      this.getList('bottom')
+      this.$refs.loadmore.onBottomLoaded()
+    },
+    onChange (index) {
+      this.currentIndex = index
+      this.form.rejoinflag = this.list[index].key
+      this.getList()
+    },
+    toBack () {
+      this.$router.push({
+        path: '/sendCar',
+        query: {
+          active: 2
+        }
+      })
+    },
+    click (index) {
+      this.currentIndex = index
+      this.form.rejoinflag = this.list[index].key
+      this.getList()
+    },
+    goDetail (item) {
+      this.$router.push({
+        path: '/rejoinListDetail',
+        query: {
+          id: item.id,
+          currentIndex: this.currentIndex
+        }
+      })
+    },
+    filtrate () {
+      this.result = []
+      this.popupVisible = true
+    },
+    reset () {
+      Object.keys(this.form).forEach((key) => {
+        if (!['limit', 'offset', 'rejoinflag'].includes(key)) {
+          this.form[key] = ''
+        }
+      })
+    },
+    submit () {
+      this.popupVisible = false
+      let carIdArr = []
+      this.result.forEach((val, index) => {
+        carIdArr.push(val.id)
+      })
+      this.form.convoyIds = carIdArr.join(',')
+      this.getList()
+    },
+    closePopup () {
+      this.popupVisible = false
+    },
+    async getList (flag) {
+      await getBackCarList(this.form, (res) => {
+        this.carList = res.convoyList
+        if (res.total - (this.form.limit * this.form.offset) > 0) {
+          this.allLoaded = false
+        } else {
+          this.allLoaded = true
+        }
+        if (flag === 'bottom') {
+          this.listData = this.listData.concat(res.rows)
+        } else {
+          this.listData = res.rows
+        }
+      })
+    },
+    toTimeClick (type) {
+      this.timeType = type
+      this.showDateTime = true
+    },
+    timeCancel () {
+      this.showDateTime = false
+    },
+    timeConfirm (value) {
+      const val = moment(value).format('YYYY-MM-DD HH:mm')
+      switch (this.timeType) {
+        case 'start': this.form.time1 = val; break
+        case 'end': this.form.time2 = val; break
+        default:
+      }
+      this.showDateTime = false
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+  @import '../../../assets/css/commonList';
+</style>

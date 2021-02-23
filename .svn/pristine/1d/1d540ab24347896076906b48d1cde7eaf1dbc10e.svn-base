@@ -1,0 +1,516 @@
+<template>
+  <div class="applay">
+      <header-bar>
+        <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#fff"/>
+        <div slot="center">
+          <span class="title">用车申请</span>
+        </div>
+        <div slot="right"><span class="right-text">用车规则</span></div>
+      </header-bar>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_geren.png" alt="">申请人</div>
+        <cell-group>
+          <p class="title-item">用车单位</p>
+          <field v-model="user_dept_name" placeholder="请输入用车单位" disabled/>
+        </cell-group>
+        <cell-group>
+          <p class="title-item">申请人</p>
+          <field v-model="user_name"  placeholder="申请人姓名" disabled/>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">申请人电话</p>
+          <field v-model="form.apply_name_phone" placeholder="请输入申请人电话" disabled/>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_danwei.png" alt="">用车时间</div>
+        <cell-group>
+           <p class="title-item">全天包车</p>
+          <div class="selector-box">
+            <radio-group v-model="form.is_chartered_bus" direction="horizontal">
+              <radio :name="1">是</radio>
+              <radio :name="0">否</radio>
+            </radio-group>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">出车时间</p>
+           <div class="change-box">
+             <input v-model="form.apply_use_time_str" class="timeText" disabled/><img  @click="changeTime(0)"  src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">归队时间</p>
+           <div class="change-box">
+              <input v-model="form.apply_back_time_str" class="timeText" disabled/><img  @click="changeTime(2)" src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+           </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_danwei.png" alt=""> 用车信息</div>
+        <cell-group>
+          <p class="title-item">乘车人</p>
+          <field v-model="form.yong_che_ren" placeholder="请输入乘车人姓名" v-validate="'required'" data-vv-as="姓名" :name="'yong_che_ren'"/>
+          <span v-show="errors2.has('yong_che_ren')" class="help is-error">{{errors2.first('yong_che_ren')}}</span>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">联系电话</p>
+          <field v-model="form.apply_use_phone" placeholder="请输入联系电话"  v-validate="'required|phoneRules'" data-vv-as="联系电话" :name="'apply_use_phone'"/>
+          <span v-show="errors2.has('apply_use_phone')" class="help is-error">{{errors2.first('apply_use_phone')}}</span>
+        </cell-group>
+        <cell-group>
+          <p class="title-item">乘车人数</p>
+          <field v-model="form.apply_man_num"  placeholder="请输入用车人数" v-validate="'required'" data-vv-as="用车人数" :name="'apply_man_num'"/>
+          <span v-show="errors2.has('apply_man_num')" class="help is-error">{{errors2.first('apply_man_num')}}</span>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">服务平台</p>
+          <div class="selector-box">
+            <selector :value="form.apply_fwzx_id" :options="fwlist" @change="platformChange" :valueMap="['id', 'dept_name']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+          <p class="title-item">用车性质</p>
+          <div class="selector-box">
+            <selector :value="form.yong_che_xz" :options="xzList" @change="natureChange" :valueMap="['id', 'xz_name']"></selector>
+          </div>
+        </cell-group>
+        <div v-if="isXinghao">
+          <cell-group>
+            <p class="title-item">审核人</p>
+            <div class="selector-box">
+              <selector :value="form.audit_user_id" :options="auditUser" @change="auditorChange" :valueMap="['id', 'user_name']"></selector>
+            </div>
+          </cell-group>
+          <cell-group>
+            <p class="title-item">任务号</p>
+            <div class="selector-box">
+              <selector :value="form.object_id" :options="TaskList" @change=" taskChange" :valueMap="['objectId', 'objectName']"></selector>
+            </div>
+          </cell-group>
+          <span v-show="errors2.has('object_id')" class="help is-error">{{errors2.first('object_id')}}</span>
+        </div>
+        <cell-group>
+           <p class="title-item">用车事由</p>
+          <div class="selector-box">
+            <selector :value="form.apply_remark" :options="remarkList" @change="reasonChange" :valueMap="['id', 'apply_remark']"></selector>
+          </div>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_yongche.png" alt="">用车线路</div>
+        <cell-group>
+           <p class="title-item">常规路线</p>
+          <div class="selector-box">
+            <selector :options="frList" @change="areaChange" :valueMap="['id', 'place_info']"></selector>
+          </div>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">出发地</p>
+            <div class="change-box">
+              <textarea v-model="form.apply_use_address_1" class="timeText" placeholder="请选择出发地址" disabled/><img  @click="changeAddress(0)" src="@/assets/images/applay_dingwei.png" alt="" style="width:24px;height:24px">
+              <input type="hidden" v-model="form.apply_use_address_1" name="apply_use_address_1" v-validate="'required'" data-vv-as="出发地">
+           </div>
+            <span v-show="errors2.has('apply_use_address_1')" class="help is-error">{{errors2.first('apply_use_address_1')}}</span>
+        </cell-group>
+        <cell-group>
+          <p class="title-item">出发地详细地址</p>
+          <field v-model="form.apply_use_address_2" placeholder="详细地址补充" v-validate="'required'"/>
+        </cell-group>
+        <cell-group>
+           <p class="title-item">目的地</p>
+            <div class="change-box">
+              <textarea v-model="form.apply_destination_1" class="timeText" placeholder="请选择目的地址" disabled/><img  @click="changeAddress(1)" src="@/assets/images/applay_dingwei.png" alt="" style="width:24px;height:24px">
+              <input type="hidden" v-model="form.apply_destination_1" name="apply_destination_1" v-validate="'required'" data-vv-as="目的地">
+           </div>
+           <span v-show="errors2.has('apply_destination_1')" class="help is-error">{{errors2.first('apply_destination_1')}}</span>
+        </cell-group>
+        <cell-group>
+          <p class="title-item">目的地详细地址</p>
+          <field v-model="form.apply_destination_2" placeholder="详细地址补充"/>
+          <p class="title-item title-other">
+          路程：<span class="blue">{{distance}}公里</span>预计时间：<span class="blue">{{useTime}}</span>
+        </p>
+        </cell-group>
+      </div>
+      <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_qita.png" alt="">其他</div>
+        <cell-group>
+           <p class="title-item">备注</p>
+           <field v-model="form.apply_bz" placeholder="请输入备注" v-validate="'required'" data-vv-as="用车人数" :name="'apply_bz'"/>
+           <span v-show="errors2.has('apply_bz')" class="help is-error">{{errors2.first('apply_bz')}}</span>
+        </cell-group>
+      </div>
+      <div class="form-bottom">
+        <button class="fC999" @click="doRest">重置</button>
+        <button class="submit" @click="doSubmit">提交</button>
+      </div>
+        <action-sheet v-model="timeShow">
+            <datetime-picker
+            v-if="showTimeOut"
+            v-model="currentDate"
+            type="datetime"
+            title="选择预计出车时间"
+            :min-date="minDate"
+            :max-date="maxDateOut"
+            @confirm="confirmTimeOut"
+            @cancel="cancelTime"
+            />
+            <datetime-picker
+            v-if="showTimeIn"
+            v-model="currentDate"
+            type="datetime"
+            title="选择预计归队时间"
+            :min-date="minDateIn"
+            :max-date="maxDate"
+            @confirm="confirmTimeIn"
+            @cancel="cancelTime"
+            />
+      </action-sheet>
+      <!-- 用车类型 -->
+      <!-- <div class="form-box">
+        <div class="title"><img src="@/assets/images/applay_zhonglei.png" alt=""> 用车种类</div>
+        <cell-group>
+           <p class="title-item chooseCar"><span>选择车型</span><img src="@/assets/images/applay_add.png" alt="" style="width:24px;height:24px" @click="changeCarKinds"></p>
+           <ul class="changeCar-list">
+             <li v-for="(item, index) in result" :key="index.name">
+                <span class="list-title">{{item.name}}</span>
+                <div class="car-item">
+                  <input type="number" v-model="item.count" placeholder="请输入车辆数">
+                  <img src="@/assets/images/applay_yichu.png" alt="" @click="remove(index)">
+               </div>
+             </li>
+           </ul>
+        </cell-group>
+      </div> -->
+      <!-- <action-sheet v-model="show" title="用车类型">
+        <div class="content" v-if="show">
+          <checkbox-group v-model="result">
+            <cell-group>
+              <cell
+                v-for="(item, index) in list"
+                clickable
+                :key="item.name"
+                :title="item.name"
+                @click="toggle(index, item)"
+              >
+                <template #right-icon>
+                  <checkbox :name="item" ref="checkboxes" :v-mode="item.isSelect"/>
+                </template>
+              </cell>
+            </cell-group>
+          </checkbox-group>
+        </div>
+      </action-sheet> -->
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import moment from 'moment'
+import '@/validate'
+import { preList, getTask, addAppaly, getArea } from '@/libs/const'
+import { transformTime, setStore, getStore } from '@/libs/util'
+import { Field, CellGroup, DatetimePicker, ActionSheet, Icon, RadioGroup, Radio } from 'vant'
+import Selector from '@/components/selector/selector'
+export default {
+  components: {
+    HeaderBar,
+    Field,
+    CellGroup,
+    Selector,
+    DatetimePicker,
+    ActionSheet,
+    RadioGroup,
+    Radio,
+    // Checkbox,
+    // CheckboxGroup,
+    // Cell,
+    Icon
+  },
+  data () {
+    return {
+      timeShow: false,
+      // list: [
+      //   { name: '越野车', isSelect: false, count: '', id: '1' },
+      //   { name: '越野车1', isSelect: false, count: '', id: '2' },
+      //   { name: '越野车2', isSelect: false, count: '', id: '3' },
+      //   { name: '越野车3', isSelect: false, count: '', id: '4' },
+      //   { name: '越野车4', isSelect: false, count: '', id: '5' },
+      //   { name: '越野车5', isSelect: false, count: '', id: '6' },
+      //   { name: '越野车6', isSelect: false, count: '', id: '7' }
+      // ],
+      // result: [],
+      // show: false,
+      // apply_dept_id（申请单位id/int）、apply_name_id（申请人id/int）、apply_name_phone（申请人电话/string）、
+      // yong_che_ren（用车人/string）、apply_use_phone（用车人电话/string）、yong_che_xz（用车性质id/int）、apply_qy_id（用车区域id/int）、
+      // apply_man_num（乘车人数/int）、apply_use_time_str（出车时间/string/yyyy-MM-dd HH:mm:ss）、apply_back_time_str（归队时间/string/yyyy-MM-dd HH:mm:ss）、
+      // apply_fwzx_id（服务中心id/int）、apply_use_address1（出车地点/string）、start_longitude（出车地点经度/string）、start_latitude（出车地点纬度/string）、
+      // apply_destination1（目的地/string）、end_longitude（目的地经度/string）、end_latitude（目的地纬度/string）、apply_use_address_2（出发地详细地址/string）、
+      // apply_destination_2（目的地详细地址/string）、apply_remark（用车事由/string、注：不是id是字符串）、audit_user_id（审核人id/int）、object_id（任务号id/int）、
+      // is_chartered_bus（是否包车/int、1是0否）、apply_bz（订单备注/string）、operation_state（操作标识/1新增、2修改）
+      form: {
+        apply_name_id: '',
+        apply_dept_id: '',
+        apply_name_phone: '',
+        yong_che_ren: '',
+        apply_use_phone: '',
+        apply_man_num: '',
+        yong_che_xz: 0,
+        apply_qy_id: 0,
+        apply_fwzx_id: 0,
+        apply_use_time_str: moment(new Date()).format('YYYY-MM-DD HH:mm'),
+        apply_back_time_str: moment(new Date()).format('YYYY-MM-DD HH:mm'),
+        apply_use_address_1: '',
+        apply_use_address_2: '',
+        start_longitude: '',
+        start_latitude: '',
+        apply_destination_1: '',
+        apply_destination_2: '',
+        end_longitude: '',
+        end_latitude: '',
+        apply_remark: 0,
+        audit_user_id: 0,
+        object_id: 0,
+        is_chartered_bus: 1,
+        apply_bz: '',
+        operation_state: this.$route.query.applyId ? 2 : 1,
+        id: this.$route.query.applyId ? JSON.parse(this.$route.query.applyId) : 0
+      },
+      isXinghao: false,
+      distance: 0, // 距离
+      useTime: 0, // 预计时间
+      fwlist: [ // 服务中心
+        { id: '1', dicName: '李四23' },
+        { id: '1', dicName: '李四33' },
+        { id: '1', dicName: '李四44' },
+        { id: '1', dicName: '李四555' }
+      ],
+      xzList: [], // 用车性质
+      remarkList: [], // 用车事由
+      frList: [], // 常规路线
+      // typelist: [],
+      auditUser: [], // 审核人
+      TaskList: [], // 任务号
+      user_dept_name: '',
+      user_name: '',
+      amapManager: {},
+      showTimeIn: false,
+      showTimeOut: false,
+      minDate: new Date(),
+      maxDateOut: new Date(2025, 10, 1),
+      minDateIn: new Date(),
+      maxDate: new Date(2025, 10, 1),
+      currentDate: new Date(),
+      isChangePlace: true
+    }
+  },
+  created () {
+    console.log(this.$route.query.applyId, this.form.operation_state, this.form.id)
+    if (this.$store.state.applayData) {
+      this.form = Object.assign(this.form, this.$store.state.applayData)
+    }
+    this.getList()
+    if (getStore('isReset')) {
+      setStore('isReset', '')
+    } else {
+      if (this.$route.query.type === '0') {
+        this.form.apply_use_address_1 = this.$route.query.address
+        this.form.start_longitude = this.$route.query.lng
+        this.form.start_latitude = this.$route.query.lat
+      }
+      if (this.$route.query.type === '1') {
+        this.form.apply_destination_1 = this.$route.query.address
+        this.form.end_longitude = this.$route.query.lng
+        this.form.end_latitude = this.$route.query.lat
+      }
+      this.getDistance()
+      this.getTime()
+    }
+  },
+  mounted () {
+  },
+  methods: {
+    getDistance () {
+      if (this.form.start_longitude && this.form.end_longitude) {
+        this.distance = (Math.round(AMap.GeometryUtil.distance([Number(this.form.start_longitude), Number(this.form.start_latitude)], [Number(this.form.end_longitude), Number(this.form.end_latitude)])) / 1000).toFixed(2)
+      }
+    },
+    getList () {
+      preList({}, (res) => {
+        this.user_dept_name = res.userbean.user_dept_name
+        this.user_name = res.userbean.user_name
+        this.form.apply_name_id = res.userbean.id
+        this.form.apply_dept_id = res.userbean.user_dept_id
+        this.form.apply_name_phone = res.userbean.user_phone
+        this.remarkList = res.remarkList
+        this.xzList = res.xzList
+        this.form.yong_che_xz = res.xzList[0].id
+        this.form.apply_remark = res.remarkList[0].id
+        this.fwlist = res.fwlist
+        this.form.apply_fwzx_id = res.fwlist[0].id
+        this.frList = res.frList
+        this.frList.unshift({
+          id: 0,
+          place_info: '自定义'
+        })
+        this.auditUser = res.auditUser
+        getTask({
+          auditId: this.auditUser[0].id,
+          useTime: this.form.apply_use_time_str
+        }, res => {
+          this.TaskList = res.data
+        })
+      })
+    },
+    // 获取驾车预计时间
+    getTime () {
+      let self = this
+      AMap.plugin('AMap.Driving', function () {
+        var driving = new AMap.Driving({
+          // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
+          policy: AMap.DrivingPolicy.LEAST_TIME
+        })
+        var startLngLat = [self.form.start_longitude, self.form.start_latitude]
+        var endLngLat = [self.form.end_longitude, self.form.end_latitude]
+
+        driving.search(startLngLat, endLngLat, function (status, result) {
+          // 未出错时，result即是对应的路线规划方案
+          if (status === 'complete') {
+            self.useTime = transformTime(result.routes[0].time)
+          } else {
+            self.useTime = 0
+          }
+        })
+      })
+    },
+    // remove (index) {
+    //   this.result.splice(index, 1)
+    // },
+    // toggle (index, item) {
+    //   this.$refs.checkboxes[index].toggle()
+    //   item.isSelect = !item.isSelect
+    // },
+    // changeCarKinds () {
+    //   this.show = !this.show
+    // },
+    toBack () {
+      this.$store.commit('setApplayData', '')
+      this.$router.replace('../index')
+    },
+    platformChange (e) {
+      this.form.apply_fwzx_id = e.id
+    },
+    natureChange (e) {
+      this.form.yong_che_xz = e.id
+      if (e.id === 3) {
+        this.isXinghao = true
+        this.form.audit_user_id = this.auditUser[0].id
+        this.form.object_id = this.TaskList[0].objectId
+      } else {
+        this.isXinghao = false
+        this.form.audit_user_id = 0
+        this.form.object_id = 0
+      }
+    },
+    reasonChange (e) {
+      this.form.apply_remark = e.id
+    },
+    areaChange (e) {
+      if (e.id !== 0) {
+        this.isChangePlace = false
+        this.form.apply_use_address_1 = e.departure
+        this.form.apply_destination_1 = e.destination
+        this.form.start_longitude = e.start_lng
+        this.form.start_latitude = e.start_lat
+        this.form.end_latitude = e.end_lat
+        this.form.end_longitude = e.end_lng
+        this.getDistance()
+        this.getTime()
+      } else {
+        this.isChangePlace = true
+        this.distance = 0
+        this.useTime = 0
+      }
+    },
+    auditorChange (e) {
+      this.form.audit_user_id = e.id
+      getTask({
+        auditId: e.id,
+        useTime: this.form.apply_use_time_str
+      }, res => {
+        this.TaskList = res.data
+      })
+    },
+    taskChange (e) {
+      this.form.object_id = e.objectId
+    },
+    changeAddress (num) {
+      if (this.isChangePlace) {
+        this.$store.commit('setApplayData', this.form)
+        this.$router.push({
+          path: '/map',
+          query: {
+            type: num
+          }
+        })
+      }
+      return false
+    },
+    // 时间选择部分
+    confirmTimeOut (value) {
+      this.form.apply_use_time_str = moment(value).format('YYYY-MM-DD HH:mm')
+      this.timeShow = false
+      this.minDateIn = value
+    },
+    confirmTimeIn (value) {
+      this.form.apply_back_time_str = moment(value).format('YYYY-MM-DD HH:mm')
+      this.maxDateOut = value
+      this.timeShow = false
+    },
+    cancelTime () {
+      this.timeShow = false
+    },
+    changeTime (flag) {
+      this.timeShow = true
+      if (flag === 0) {
+        this.showTimeOut = true
+        this.showTimeIn = false
+      } else {
+        this.showTimeIn = true
+        this.showTimeOut = false
+      }
+    },
+    doSubmit () {
+      this.$validator.validateAll().then(async (valid) => {
+        if (valid) {
+          await getArea({ // 获取用车区域
+            lng: this.form.end_longitude,
+            lat: this.form.end_latitude
+          }, (res) => {
+            this.form.apply_qy_id = res.qyId
+            addAppaly(this.form, res => {
+              this.$toast({
+                message: res.msg,
+                duration: 1000,
+                className: 'toastStyle',
+                onClose: () => {
+                  this.$router.push('/index')
+                }
+              })
+            })
+          })
+        }
+      })
+    },
+    doRest () {
+      setStore('isReset', 'isReset')
+      this.$router.go(0)
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+     @import 'applay';
+</style>

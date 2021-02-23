@@ -1,0 +1,113 @@
+<template>
+  <div class="index">
+      <header-bar  bacColor="transparent">
+        <div slot="left">
+          <span @click="toBack" class="icons">返回</span>
+        </div>
+        <div slot="center">
+          <span class="title">公务用车管理系统</span>
+        </div>
+        <div slot="right"><span class="icons">搜索</span></div>
+      </header-bar>
+      <img class="banner" src="../../assets/images/Index-banner.png"/>
+      <div class="userCar-application">
+        <div class="user-left">
+          <img src="../../assets/images/index-shengqi.png" alt="">
+          <div class="userCar-center f32">
+            用车申请
+            <p class="f24">填写信息，申请用车计划</p>
+          </div>
+        </div>
+        <img src="../../assets/images/index-add.png" alt="" class="user-add" @click="useCar">
+      </div>
+      <div class="myCar">
+        <div class="myCar-title">
+          <div>
+            <h4 class="f28">我的用车</h4>
+            <p class="fCccc">用车情况，一键查看</p>
+          </div>
+          <img src="../../assets/images/index-yongche.png" alt="">
+        </div>
+        <ul class="f24 fC333">
+          <li>
+            <p>待审批</p>
+            <h5>6</h5>
+          </li>
+          <li>
+            <p>待调派</p>
+            <h5>6</h5>
+          </li>
+          <li>
+            <p>待归队</p>
+            <h5>6</h5>
+          </li>
+          <li>
+            <p>待评价</p>
+            <h5>6</h5>
+          </li>
+        </ul>
+        <p class="fCccc f24 myCar-text">累计完成订单322</p>
+        <p class="fCccc f24 myCar-text">累计完成订单322</p>
+      </div>
+      <div class="my-box">
+        <div class="myCost myCommon">
+          <div class="myTitle">
+            <div>
+              <h4 class="f28 fC333 fBold">我的费用</h4>
+              <p class="fCccc f22">用车费用，轻松掌握</p>
+            </div>
+            <img src="../../assets/images/index-feiyong.png" alt="">
+          </div>
+          <div class="my-bottom">
+            <h3 class="f24 fC333">累计费用</h3>
+            <h4 class="f48">23,760</h4>
+            <p class="fCccc f24">费用次数  16</p>
+          </div>
+        </div>
+        <div class="evaluate myCommon">
+          <div class="myTitle">
+            <div>
+              <h4 class="f28 fC333 fBold">我的评价</h4>
+              <p class="fCccc f22">我们进步，与您同步</p>
+            </div>
+            <img src="../../assets/images/index-feiyong.png" alt="">
+          </div>
+          <div class="my-bottom">
+            <h3 class="f24 fC333">全部评价</h3>
+            <h4 class="f48">125</h4>
+            <p class="fCccc f24">待评价  20</p>
+          </div>
+        </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+export default {
+  components: {
+    HeaderBar
+  },
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    toBack () {
+      console.log(111)
+    },
+    useCar () {
+      console.log(11)
+      this.$router.push({
+        path: '/applay',
+        query: {}
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'index';
+</style>

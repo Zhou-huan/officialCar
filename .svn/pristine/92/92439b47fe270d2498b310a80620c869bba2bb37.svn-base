@@ -1,0 +1,62 @@
+// import axios from './http'
+import axios from 'axios'
+import vue from '../main.js'
+import qs from 'qs'
+import router from '../router'
+
+// import { getStore } from './util'
+
+export const responseHandler = function (response, options) { // 公共响应码集中处理
+  let code = response.code
+  if (code === 200) {
+    options.callback(response)
+  } else if (code === 500) {
+    vue.$toast({
+      message: response.msg,
+      duration: 1000,
+      className: 'toastStyle',
+      onClose: () => {
+        router.push('/login')
+      }
+    })
+  } else {
+    if (options && options.doNotToast) { // 不要弹Toast，错误代码自己处理 #f76260
+      options.callback(response)
+    } else { // 默认toast处理
+      vue.$toast({
+        message: response.msg,
+        duration: 1000,
+        className: 'toastStyle'
+      })
+    }
+  }
+}
+
+export const fetch = async (url = '', options = {}, type = 'POST') => {
+  await fetchFromAxios(url, options, type)
+}
+/* eslint-disable*/
+const fetchFromAxios = (url = '', options = {}, type = 'POST') => {
+  // let userBean = getStore('userBean') ? JSON.parse(getStore('userBean')) : {}
+  // let sessionId = userBean && userBean.sessionId ? userBean.sessionId : ''
+  // console.log(sessionId)
+  let headers = {
+    'Accept': 'application/json'
+  }
+  if (options.reqBody) {
+    headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8'
+    headers['X-Requested-With'] = 'XMLHttpRequest'
+  }
+  axios({
+    url: url, // 是用于请求的服务器 URL
+    baseURL: process.env.VUE_APP_URL, // 将自动加在 `url` 前面，除非 `url` 是一个绝对 URL
+    method: type.toLowerCase(), // 请求方式
+    headers: headers, // `headers` 是即将被发送的自定义请求头
+    params: options.reqParams || {}, // 是即将与请求一起发送的 URL 参数
+    data: qs.stringify(options.reqBody) || {}, // `data` 是作为请求主体被发送的数据
+    withCredentials: true, // 是否每次请求都携带cookie
+    timeout: 30000 // 设置超时时间
+  }).then((response) => {
+    responseHandler(response.data, options)
+  })
+}

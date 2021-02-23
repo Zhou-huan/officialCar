@@ -1,0 +1,149 @@
+.useCarList {
+    font-size: 28px;
+    padding: 100px 36px 0px;
+    // touch-action: none;
+    .title-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+    }
+    .van-tabs {
+        position: fixed;
+        top: 90px;
+        left: 0px;
+        z-index: 999;
+        border-bottom: 1px solid #eee;
+    }
+    /deep/.mint-loadmore{
+        margin-top: 80px;
+        .mint-loadmore-top, .mint-loadmore-bottom{
+          text-align: center;
+        }
+        .mint-loadmore-text{
+          font-size: 30px;
+        }
+      }
+    .content {
+        min-height: 85vh;
+        padding-top: 10px;
+        .list-box {
+          li {
+            display: flex;
+            flex-direction: row;
+            font-size: 24px;
+            margin-top: 40px;
+            align-items: center;
+            align-content: center;
+            position: relative;
+            img {
+              width: 120px;
+            }
+            p {
+              padding-top: 10px;
+              color: #ccc;
+            }
+            .list-center{
+              width: 450px;
+              box-sizing: border-box;
+              padding-left: 20px;
+              p{
+                word-break: break-all;
+              }
+            }
+            .list-right {
+              position: absolute;
+              top: 0;
+              right: 0;
+            }
+          }
+        }
+    }
+    .mint-popup {
+      width: 80%;
+      height: 100%;
+      .filter-box {
+        width: 100%;
+        height: 100%;
+        padding: 36px;
+        box-sizing: border-box;
+        h3 {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          img {
+            width: 38px;
+            height: 24px;
+          }
+        }
+        .carKinds {
+          p {
+            padding-top: 60px;
+            color: #737373;
+            font-size: 24px;
+          }
+          ul {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding-bottom: 60px;
+            li {
+              padding: 0px 16px;
+              height: 40px;
+              border-radius: 20px;
+              text-align: center;
+              line-height: 40px;
+              border: 1px solid #ccc;
+              color: #ccc;
+              margin-top: 15px;
+              margin-right: 20px;
+            }
+            .active {
+              border: 1px solid #3378F1;
+              color: #3378F1;
+            }
+          }
+        }
+        .form-box {
+          p {
+            padding-top: 20px;
+            color: #737373;
+            font-size: 24px;
+          }
+          .selector-box {
+            padding: 10px 0;
+          }
+          .van-cell {
+            padding: 10px 0;
+            color: #333;
+            font-size: 28px;
+          }
+        }
+        .btn-box {
+          margin-top: 100px;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          button {
+            width: 204px;
+            height: 80px;
+            background: #FFFFFF;
+            box-shadow: 0px 2px 8px 0px rgba(0, 70, 192, 0.1);
+            border-radius: 8px;
+            border: none;
+            color: #737373;
+          }
+          .doOk {
+            background-color: #3378F1;
+            color: #fff;
+          }
+        }
+      }
+    }
+}

@@ -1,0 +1,58 @@
+.applay {
+    padding: 130px 0px 80px;
+    font-size: 28px;
+    background-color: rgb(247, 247, 247);
+    .header-bar {
+        height: 128px;
+        .icons {
+            font-size: 28px;
+            color: #fff;
+        }
+        .right-text {
+            font-size: 24px;
+            color: #fff;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+    }
+    .form-box {
+        .title { 
+            font-size: 24px;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            padding: 20px 34px;
+            color: #B0B2B8;
+            img {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        .selector-box {
+            padding:20px 34px;
+        }
+        .title-item {
+            font-size: 24px;
+            color: #999;
+            padding: 20px 34px 0px;
+        }
+        .change-box {
+            padding: 20px 34px;
+            box-sizing: border-box;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            .timeText {
+                border: 0;
+                flex: 1;
+            }
+        }
+    }
+    .picker {
+        width: 100%;
+        position: fixed;
+        left: 0;
+        bottom: 0px;
+    }
+}

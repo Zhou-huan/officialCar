@@ -1,0 +1,103 @@
+.detail {
+    padding:120px 36px 40px;
+    font-size: 24px;
+    .title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    .root {
+        background: #3378F1 url('../images/list-bg.png');
+        background-size: 100% 400px;
+        box-shadow: 0px 2px 16px 0px rgba(53, 78, 217, 0.2);
+        border-radius: 12px;
+        margin-top: 20px;
+        padding: 30px;
+        box-sizing: border-box;
+        color: #fff;
+        font-size: 30px;
+        p {
+            opacity: 0.65;
+            font-size: 24px;
+            padding-top: 10px;
+            img {
+                width: 30px;
+                height: 30px;
+                margin-left: 16px;
+            }
+        }
+        img {
+            width: 36px;
+            height: 15px;
+        }
+        .root-center {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 30px 0;
+        }
+    }
+    .user-box {
+        margin-top: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #737373;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+        .user {
+            h4 {
+                padding-bottom: 10px;
+            }
+        }
+    }
+    .detail-list {
+        color: #737373;
+        li {
+            margin-top: 35px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            span {
+                width: 160px;
+            }
+        }
+    }
+    .btn-box {
+        width: 100%;
+        padding: 36px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        .left {
+            color: #737373;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            img {
+                width: 26px;
+                height: 26px;
+                margin-right: 5px;
+            }
+        }
+        .right {
+            button {
+                width: 218px;
+                height: 76px;
+                background: #3378F1;
+                border-radius: 8px;
+                border: 0;
+                color: #fff;
+                margin: 0px 10px;
+                font-size: 32px;
+            }
+        }
+    }
+    .detail-btn {
+        display: flex;
+        flex-direction: row;
+    }
+}

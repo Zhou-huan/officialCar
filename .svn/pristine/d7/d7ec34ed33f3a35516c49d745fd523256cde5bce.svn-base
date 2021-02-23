@@ -1,0 +1,260 @@
+<template>
+  <div class="useCarList">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">我的用车</span>
+      </div>
+      <div slot="right" class="title-right" @click="filtrate">
+        <img src="@/assets/images/list-filter.png" alt="">
+        <span class="f24 fC333">筛选</span>
+      </div>
+    </header-bar>
+    <tabs v-model="currentIndex" color="#fff" title-active-color="#333" swipeable title-inactive-color="#999" @click="click">
+      <tab v-for="(item, index) in list" :title="item.name" :key="index">
+      </tab>
+    </tabs>
+            <Loadmore :top-method="loadTop"
+                      :bottom-method="loadBottom"
+                      :bottomAllLoaded="allLoaded"
+                      bottomPullText="上拉加载"
+                      bottomDropText="加载更多"
+                     ref="loadmore">
+                     <swipe @change="onChange" :initial-swipe="4" :show-indicators="false">
+                      <swipe-item v-for="(item, index) in list" :key="index">
+                        <div class="content">
+                          <ul class="list-box">
+                            {{index}}
+                            <li v-for="index in 4" :key="index" @click="goDetail">
+                              <img src="@/assets/logo.png" alt="">
+                              <div class="list-center">
+                                <h4 class="f28">20201128X000224</h4>
+                                <p>用车人：<span class="fC333">张三</span></p>
+                                <p>出发地：<span class="green">张三</span></p>
+                                <p>目的地：<span class="blue">张三</span></p>
+                              </div>
+                              <div class="list-right">
+                                <c-button class="btn-hollow" :clsName="stsCls[0]">限时分钟</c-button>
+                              </div>
+                            </li>
+                          </ul>
+                    </div>
+                  </swipe-item>
+                </swipe>
+        </Loadmore>
+        <!-- 筛选框 -->
+        <Popup
+          v-model="popupVisible"
+          position="right">
+          <div class="filter-box">
+            <h3>筛选<img src="@/assets/images/list-shouqi.png" alt="" @click="closePopup"></h3>
+            <div class="carKinds">
+              <p class="title-item">车辆类型</p>
+              <ul class="f24">
+                <li v-for="(item, index) in carList" :key="index" :class="{active:item.active}" @click="toggleType(index,item)">{{item.name}}</li>
+              </ul>
+            </div>
+            <div class="form-box">
+              <cell-group>
+                <p class="title-item">用车单位</p>
+                <div class="selector-box">
+                  <selector :value="form.unit" :options="queLevel" @change="unitChange" :valueMap="['id', 'dicName']"></selector>
+                </div>
+              </cell-group>
+              <cell-group>
+                <p class="title-item">用车事由</p>
+                <div class="selector-box">
+                  <selector :value="form.reason" :options="queLevel" @change="reasonChange" :valueMap="['id', 'dicName']"></selector>
+                </div>
+              </cell-group>
+              <cell-group>
+                <p class="title-item">用车人</p>
+                <field v-model="form.user" placeholder="请输入用车人姓名或电话号码" />
+              </cell-group>
+              <cell-group>
+                <p class="title-item">用车时间</p>
+                <field v-model="form.useTime" placeholder="起始日期" />
+              </cell-group>
+              <cell-group>
+                <field v-model="form.endTime" placeholder="截止日期" />
+              </cell-group>
+            </div>
+            <div class="btn-box">
+              <button @click="rese">重置</button>
+              <button class="doOk" @click="submit">确定</button>
+            </div>
+          </div>
+        </Popup>
+        <!--  -->
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import CButton from '@/components/button/button'
+import { Icon, Tab, Tabs, Swipe, SwipeItem, Field, CellGroup } from 'vant'
+import { Loadmore, Popup } from 'mint-ui'
+import Selector from '@/components/selector/selector'
+import 'mint-ui/lib/style.css'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Tab,
+    Tabs,
+    Loadmore,
+    Swipe,
+    SwipeItem,
+    CButton,
+    Popup,
+    Field,
+    CellGroup,
+    Selector
+  },
+  mounted () {
+  },
+  data () {
+    return {
+      type: this.$route.query.type ? this.$route.query.type : 0,
+      name: '',
+      popupVisible: false,
+      allLoaded: false,
+      currentIndex: 4,
+      carList: [
+        {
+          name: '商务车',
+          active: false,
+          id: '123123'
+        },
+        {
+          name: '商务车1',
+          active: false,
+          id: '22'
+        },
+        {
+          name: '商务车2',
+          active: false,
+          id: '454545'
+        },
+        {
+          name: '商务车3',
+          active: false,
+          id: '123133323'
+        },
+        {
+          name: '商务车4',
+          active: false,
+          id: '1231355523'
+        },
+        {
+          name: '商务车5',
+          active: false,
+          id: '77777'
+        }
+      ],
+      stsCls: {
+        0: 'red',
+        1: 'orange',
+        2: 'blue',
+        3: 'green'
+      },
+      list: [
+        { name: '张三', id: '12' },
+        { name: '张三2', id: '23' },
+        { name: '张三3', id: '45' },
+        { name: '张三4', id: '56' },
+        { name: '张三56', id: '78' },
+        { name: '张三562', id: '738' }
+      ],
+      text: '张三李四',
+      isLoading: false,
+      queLevel: [
+        { id: 1, dicName: '李四23' },
+        { id: 1, dicName: '李四33' },
+        { id: 1, dicName: '李四44' },
+        { id: 1, dicName: '李四555' }
+      ],
+      form: {
+        unit: 0,
+        reason: 0,
+        carType: [],
+        user: '',
+        useTime: '',
+        endTime: ''
+      }
+    }
+  },
+  methods: {
+    unitChange (e) {
+      this.form.unit = e.dicName
+    },
+    reasonChange (e) {
+      this.form.reason = e.dicName
+    },
+    loadTop () {
+      this.$refs.loadmore.onTopLoaded()
+    },
+    loadBottom () {
+      this.allLoaded = true// 若数据已全部获取完毕
+      console.log('触底啦')
+      this.$refs.loadmore.onBottomLoaded()
+    },
+    onChange (index) {
+      this.currentIndex = index
+    },
+    toBack () {
+      this.$router.push({
+        path: '/sendCar',
+        query: {
+          active: 2
+        }
+      })
+    },
+    click (index) {
+      this.currentIndex = index
+    },
+    goDetail () {
+      console.log(this.type)
+      if (this.type === 0) {
+        this.$router.push({
+          path: '/sendCarDetail',
+          query: {}
+        })
+      } else if (this.type === 1) {
+        return false
+      } else {
+        this.$router.push({
+          path: '/sendCarDetail',
+          query: {}
+        })
+      }
+    },
+    // 筛选部分功能
+    toggleType (index, item) {
+      this.carList[index].active = !this.carList[index].active
+      if (this.carList[index].active) {
+        this.form.carType.push(item.id)
+      } else {
+        this.form.carType.splice(this.form.carType.indexOf(item.id), 1)
+      }
+    },
+    filtrate () {
+      this.popupVisible = true
+    },
+    rese () {
+      console.log('重置')
+    },
+    submit () {
+      console.log(this.form)
+      this.popupVisible = false
+    },
+    closePopup () {
+      this.popupVisible = false
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import '../../../assets/css/commonList.less';
+</style>

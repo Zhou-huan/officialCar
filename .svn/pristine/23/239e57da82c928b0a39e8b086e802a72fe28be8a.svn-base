@@ -1,0 +1,47 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'main-page',
+    component: () => import('@/components/main-page.vue').then(m => m.default),
+    redirect: '/login',
+    children: [
+      {
+        path: '/index',
+        name: 'Index', // 首页
+        meta: {
+          auth: true
+        },
+        component: () => import('@/views/index/Index.vue').then(m => m.default)
+      },
+      {
+        path: '/examine',
+        name: 'Examine', // 审批
+        meta: {
+          auth: true
+        },
+        component: () => import('@/views/examine/Examine.vue').then(m => m.default)
+      }
+    ]
+  },
+  {
+    path: '/applay',
+    name: 'Applay',
+    component: () => import(/* webpackChunkName: "about" */ '../views/applay/Applay.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/login/Login.vue')
+  }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+export default router

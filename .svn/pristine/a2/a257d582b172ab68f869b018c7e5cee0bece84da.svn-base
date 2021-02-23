@@ -1,0 +1,19 @@
+export default {
+  required: {
+    getMessage (field, args) {
+      return field + '不能为空'
+    },
+    validate (value) {
+      return value.length !== 0
+    }
+  },
+  digital: {
+    getMessage (field, args) {
+      return field + '只能为合法的数字'
+    },
+    validate (value) {
+      let reg = /^([1-9]{1}\d*)$/
+      return reg.test(value)
+    }
+  }
+}

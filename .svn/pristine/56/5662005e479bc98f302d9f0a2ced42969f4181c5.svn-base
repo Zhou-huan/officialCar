@@ -1,0 +1,25 @@
+<template>
+  <div class="home">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Button type="primary" size="small">主要按钮</Button>
+    <span class="test">3333</span>
+  </div>
+</template>
+
+<script>
+import { Button } from 'vant'
+import HelloWorld from '@/components/HelloWorld.vue'
+
+export default {
+  name: 'Home',
+  components: {
+    HelloWorld,
+    Button
+  }
+}
+</script>
+<style lang="less">
+.test {
+  font-size: 30px;
+}
+</style>

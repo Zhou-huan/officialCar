@@ -1,0 +1,91 @@
+.choose-wrapper{
+  padding-top: 120px;
+  .choose-cnt{
+    padding: 0 34px;
+  }
+  .van-checkbox{
+    background: #fff;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.04);
+    border-radius: 12px;
+    padding:30px;
+    box-sizing: border-box;
+    position: relative;
+    .van-checkbox__icon{
+      position: absolute;
+      top: 30px;
+      right: 30px;
+    }
+    .van-checkbox__label{
+      margin-left: 0;
+      p{
+        font-size: 24px;
+        color: #737373;
+        line-height: 1.9;
+      }
+      .no{
+        font-size: 28px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #F5F5F5;
+      }
+      h2{
+        padding: 17px 0;
+        label, span{
+          display: block;
+        }
+        label{
+          font-size: 28px;
+          font-weight: bold;
+          color: #333;
+        }
+        span{
+          font-size: 24px;
+          color: #737373;
+          opacity: 0.65;
+        }
+        .icon{
+          border-width: 1px;
+          border-style: solid;
+          font-size: 22px;
+          display: inline-block;
+          padding: 0 3px;
+          line-height: 1.4;
+          margin-left: 5px;
+          &.green{
+            color: #00C164;
+            border-color: rgba(0, 192, 99, .65);
+          }
+          &.red{
+            color: #FF5938;
+            border-color: rgba(255, 88, 55, .65);
+          }
+        }
+      }
+    }
+  }
+  .bottom{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    padding: 16px 35px;
+    box-sizing: border-box;
+    background: #fff;
+    .num{
+      font-size: 28px;
+      font-weight: 400;
+      color: #737373;
+      em{
+        color: #3378F1;
+        font-style: normal;
+      }
+    }
+    .van-button{
+      height: 68px;
+      padding: 0 69px;
+      border-radius: 8px;
+    }
+  }
+}

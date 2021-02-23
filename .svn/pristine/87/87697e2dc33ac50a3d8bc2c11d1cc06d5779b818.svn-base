@@ -1,0 +1,183 @@
+<template>
+  <div class="detail">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">订单详情</span>
+      </div>
+    </header-bar>
+    <div class="title">
+      <span>订单号：{{ detail.yong_che_no }}</span>
+      <c-button class="btn-hollow" :clsName="stsCls[detail.apply_flow_state]">
+        {{ detail.apply_flow_state | stsTxt }}
+      </c-button>
+    </div>
+    <div class="root">
+      <h4>{{ detail.apply_use_address_2 }}</h4>
+      <p>{{ detail.apply_use_time_str }} {{ detail.apply_use_time_str | getWeek}}<img src="@/assets/images/list-chu.png" alt=""></p>
+      <div class="root-center">
+        <img src="@/assets/images/list-jiantou.png" alt="">
+        <span class="f24">{{ detail.apply_sx_pople }}</span>
+      </div>
+      <h4>{{ detail.apply_destination_2 }}</h4>
+      <p>{{ detail.apply_back_time_str }} {{ detail.apply_back_time_str | getWeek}}<img src="@/assets/images/list-gui.png" alt=""></p>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+        <div class="fC999">申请人：<span class="fC333 fBold">{{ detail.apply_name }}</span></div>
+        <span>{{ detail.apply_name_phone }}</span>
+      </div>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+        <div class="fC999">用车人：<span class="fC333 fBold">{{ detail.yong_che_ren }}</span></div>
+        <span>{{ detail.apply_use_phone }}</span>
+      </div>
+      <div>
+        <p v-if="detail.car_num">车牌号：{{ detail.car_num }}</p>
+        <span>乘车人数：{{ detail.apply_man_num }}人</span>
+      </div>
+    </div>
+    <ul class="detail-list f28">
+      <li>
+        <span class="fCccc">用车事由：</span>{{ detail.apply_remark_str }}
+      </li>
+      <li>
+        <span class="fCccc">用车部门：</span> {{ detail.apply_dept_name }}
+      </li>
+      <li>
+        <span class="fCccc">用车性质：</span>{{ detail.yong_che_xz }}
+      </li>
+      <li>
+        <span class="fCccc">用车区域：</span> {{ detail.quyu_str }}
+      </li>
+      <li>
+        <span class="fCccc">备注信息：</span>{{ detail.apply_bz }}
+      </li>
+      <li v-if="detail.apply_flow_state === 2">
+        <span class="fCccc">反馈原因：</span>{{ detail.apply_check_yj }}
+      </li>
+    </ul>
+    <div class="btn-box" v-if="detail.apply_flow_state === 0">
+      <div class="left" @click="toOpr('feedback')">
+        <img src="@/assets/images/list-feedback.png" alt="">反馈
+      </div>
+      <div class="right">
+        <button @click="toOpr('pass')">通过</button>
+      </div>
+    </div>
+    <popup v-model="showFeedback" :closeable="true" :close-on-click-overlay="false" :round="true" class="brief-popup">
+      <cell-group title="请输入反馈原因或意见" class="cell-brief">
+        <field type="textarea" v-model="reason" />
+      </cell-group>
+      <div class="btn-box">
+        <Button :plain="true" @click="feedbackCancel">取消</Button>
+        <Button type="info" :plain="true" @click="feedbackOk">确定</Button>
+      </div>
+    </popup>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon, Toast, Popup, Button, Field, CellGroup } from 'vant'
+import { getApplyInfoById, auditPass, auditRebut } from '@/libs/const'
+import CButton from '@/components/button/button'
+import moment from 'moment'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Popup,
+    Button,
+    Field,
+    CellGroup,
+    CButton
+  },
+  data () {
+    return {
+      detail: {},
+      id: this.$route.query.id,
+      state: this.$route.query.state,
+      stsCls: {
+        0: 'yellow',
+        1: 'yellow',
+        2: 'red'
+      },
+      showFeedback: false,
+      reason: ''
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.getDetail()
+    })
+  },
+  filters: {
+    stsTxt (flow) {
+      const obj = {
+        0: '等待审批',
+        1: '等待调度',
+        2: '审批驳回'
+      }
+      return obj[flow]
+    },
+    getWeek (val) {
+      return moment(val).format('dddd')
+    }
+  },
+  methods: {
+    toBack () {
+      this.$router.push({
+        path: '/carExamineList',
+        query: {}
+      })
+    },
+    async getDetail () {
+      await getApplyInfoById({ applyId: this.id }, (res) => {
+        this.detail = res.carAppFrom
+        console.log(this.detail)
+      })
+    },
+    async toOpr (type, state) {
+      switch (type) {
+        case 'pass': { // 通过
+          await auditPass({
+            applyId: this.id
+          }, (res) => {
+            Toast.success('操作成功')
+            setTimeout(() => {
+              this.toBack()
+            }, 1000)
+          })
+          break
+        }
+        case 'feedback': { // 反馈(驳回)
+          this.showFeedback = true
+          break
+        }
+        default:
+      }
+    },
+    feedbackCancel () {
+      this.showFeedback = false
+    },
+    async feedbackOk () {
+      await auditRebut({
+        applyId: this.id,
+        reason: this.reason
+      }, (res) => {
+        this.showFeedback = false
+        Toast.success('操作成功')
+        setTimeout(() => {
+          this.toBack()
+        }, 1000)
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+  @import '../../../assets/css/commonDetail.less';
+</style>

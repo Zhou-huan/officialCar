@@ -1,0 +1,132 @@
+<template>
+  <div class="detail">
+    <header-bar bacColor="#fff">
+      <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+      <div slot="center">
+        <span class="title fC333 f32 fBold">任务详情</span>
+      </div>
+    </header-bar>
+    <div class="title"><span>订单号：{{ detail.yong_che_no }}</span>
+      <c-button class="btn-hollow" :clsName="stsCls[detail.apply_flow_state]">
+        {{ detail.apply_flow_state | stsTxt(detail.apply_convoy_id) }}
+      </c-button>
+    </div>
+    <div class="root">
+      <h4>{{ detail.apply_use_address_1 }}<span v-if="detail.apply_use_address_2">({{ detail.apply_use_address_2 }})</span></h4>
+      <p>{{ detail.apply_use_time_str }} {{ detail.apply_use_time_str | getWeek}}<img src="@/assets/images/list-chu.png" alt=""></p>
+      <div class="root-center">
+        <img src="@/assets/images/list-jiantou.png" alt="">
+        <span class="f24">{{ detail.apply_sx_pople }}</span>
+      </div>
+      <h4>{{ detail.apply_destination_1 }}<span v-if="detail.apply_destination_2">({{ detail.apply_destination_2 }})</span></h4>
+      <p>{{ detail.return_time_str }} {{ detail.return_time_str | getWeek}}<img src="@/assets/images/list-gui.png" alt=""></p>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+        <div class="fC999">申请人：<span class="fC333 fBold">{{ detail.apply_name }}</span></div>
+        <span>{{ detail.apply_name_phone }}</span>
+      </div>
+    </div>
+    <div class="user-box f28">
+      <div class="user">
+        <div class="fC999">用车人：<span class="fC333 fBold">{{ detail.yong_che_ren }}</span></div>
+        <span>{{ detail.apply_use_phone }}</span>
+      </div>
+      <div>
+        <p v-if="detail.car_num">车牌号：{{ detail.car_num }}</p>
+        <span>乘车人数：{{ detail.apply_man_num }}人</span>
+      </div>
+    </div>
+    <ul class="detail-list f28">
+      <li>
+        <span class="fCccc">用车事由：</span>{{ detail.apply_remark_str }}
+      </li>
+      <li>
+        <span class="fCccc">用车部门：</span> {{ detail.apply_dept_name }}
+      </li>
+      <li>
+        <span class="fCccc">用车性质：</span>{{ detail.yong_che_xz }}
+      </li>
+      <li>
+        <span class="fCccc">用车区域：</span> {{ detail.quyu_str }}
+      </li>
+      <li>
+        <span class="fCccc">备注信息：</span>{{ detail.apply_bz }}
+      </li>
+    </ul>
+    <div class="btn-box" v-if="detail.apply_flow_state !== 5">
+      <div class="right">
+        <button>回车</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import CButton from '@/components/button/button'
+import { getApplyInfoById } from '@/libs/const'
+import { Icon } from 'vant'
+import moment from 'moment'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    CButton
+  },
+  data () {
+    return {
+      detail: {},
+      id: this.$route.query.id,
+      stsCls: {
+        0: 'yellow',
+        1: ''
+      }
+    }
+  },
+  mounted () {
+    this.getDetail()
+  },
+  filters: {
+    stsTxt (flow) {
+      console.log(flow)
+      let text = ''
+      if (flow === 5) {
+        text = '已完成'
+      } else {
+        text = '未回车'
+      }
+      return text
+    },
+    getWeek (val) {
+      return moment(val).format('dddd')
+    }
+  },
+  methods: {
+    async getDetail () {
+      await getApplyInfoById({ applyId: this.id }, (res) => {
+        this.detail = res.carAppFrom
+        console.log(res)
+      })
+    },
+    toBack () {
+      this.$router.push({
+        path: '/taskList',
+        query: {
+          currentIndex: this.$route.query.currentIndex
+        }
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.right {
+  width: 100%;
+  button {
+    width: 100% !important;
+  }
+}
+@import '../../../assets/css/commonDetail.less';
+</style>

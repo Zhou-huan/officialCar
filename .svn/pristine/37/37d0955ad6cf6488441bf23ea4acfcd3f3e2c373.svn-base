@@ -1,0 +1,64 @@
+.changeCar {
+    padding: 120px 20px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    background-color: rgba(245, 248, 245, 0.925);
+    .content {
+        color: #333;
+        font-size: 24px;
+        .search-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            .van-cell {
+                border: 1px solid #eee;
+                width: 80%;
+                padding: 10px;
+            }
+            button {
+                width: 18%;
+                height: 70px;
+                color: #fff;
+                background-color: #3378F1;
+                border: 0;
+                border-radius: 5px;
+            }
+        }
+        .header-title {
+            padding-top: 40px;
+            ul {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 28px;
+                font-weight: bold;
+                border-bottom: 1px solid #666;
+                padding-bottom: 20px;
+                li {
+                    text-align: center;
+                    width: 25%;
+                }
+            }
+        }
+        .header-list {
+            ul {
+               li {
+                   display: flex;
+                   flex-direction: row;
+                   justify-content: space-between;
+                   text-align: center;
+                    line-height: 80px;
+                    border-bottom: 1px solid #eee;
+                    span {
+                        width: 25%;
+                    }
+                    &:active, &:hover {
+                        background-color: rgba(212, 211, 211, 0.808);
+                    }
+               } 
+            }
+        }
+    }
+}

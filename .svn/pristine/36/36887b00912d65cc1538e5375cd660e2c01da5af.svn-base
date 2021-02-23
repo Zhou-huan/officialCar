@@ -1,0 +1,87 @@
+<template>
+  <div class="change-pwd">
+      <header-bar bacColor="#fff">
+        <icon slot="left" name="arrow-left"  @click="toBack" class="icons" size="24px" color="#333"/>
+        <div slot="center">
+          <span class="title fC333 fBold">修改手机号码</span>
+        </div>
+      </header-bar>
+      <div class="form-box">
+        <cell-group>
+           <p class="title-item fC999">原手机号码</p>
+          <field v-model="oldPhone" placeholder="请输入原手机号码" />
+        </cell-group>
+        <cell-group>
+           <p class="title-item blue">新手机号码</p>
+          <field v-model="newPhone" placeholder="请输入新手机号码" />
+        </cell-group>
+      </div>
+      <div class="btn-box">
+        <button class="btn">提交</button>
+      </div>
+  </div>
+</template>
+
+<script>
+import HeaderBar from '@/components/header-bar/header-bar'
+import { Icon, Field, CellGroup } from 'vant'
+export default {
+  components: {
+    HeaderBar,
+    Icon,
+    Field,
+    CellGroup
+  },
+  data () {
+    return {
+      oldPhone: '',
+      newPhone: ''
+    }
+  },
+  methods: {
+    toBack () {
+      this.$router.push('./index')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.change-pwd {
+  padding: 120px 0;
+  background: #eff0f0;
+  box-sizing: border-box;
+  height: 100%;
+  .form-box {
+    font-size: 24px;
+    padding: 0 36px;
+    background: #fff;
+    .title-item {
+      padding-top: 20px;
+    }
+    .van-cell {
+      padding: 10px 0;
+    }
+  }
+  .explain {
+    font-size: 24px;
+    color: #ccc;
+    padding: 20px 36px;
+  }
+  .btn-box {
+    width: 100%;
+    box-sizing: border-box;
+    padding:220px 136px;
+    font-size: 32px;
+    .btn {
+      width: 100%;
+      height: 76px;
+      background: #3378F1;
+      border-radius: 8px;
+      color:#fff;
+      border:0;
+      margin: 0 auto;
+    }
+  }
+}
+</style>

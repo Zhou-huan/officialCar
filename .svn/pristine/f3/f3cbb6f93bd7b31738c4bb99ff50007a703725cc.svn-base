@@ -1,0 +1,53 @@
+<template>
+  <div class="driveCar">
+      <img class="banner" src="../../assets/images/Index-banner.png"/>
+      <div class="myCar" @click="golist">
+        <div class="myCar-title">
+          <div>
+            <h4 class="f28">任务列表</h4>
+            <p class="fCccc">任务管理，无需错过</p>
+          </div>
+          <img src="../../assets/images/index4-renwulist.png" alt="">
+        </div>
+        <ul class="f24 fC333">
+          <li>
+            <p>待接收</p>
+            <h5>6</h5>
+          </li>
+          <li>
+            <p>进行中</p>
+            <h5>6</h5>
+          </li>
+          <li>
+            <p>待确认</p>
+            <h5>6</h5>
+          </li>
+          <li>
+            <p>今日完成</p>
+            <h5>6</h5>
+          </li>
+        </ul>
+        <p class="fCccc f24 myCar-text">累计完成订单322</p>
+      </div>
+      <img src="../../assets/images/index4-shigushangbao.png" alt="" class="accident-banner">
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+
+    }
+  },
+  methods: {
+    golist () {
+      this.$router.push('/taskList')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+@import 'driveCar';
+</style>
