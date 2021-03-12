@@ -9,7 +9,8 @@ export default new Vuex.Store({
     carpoolData: [], // 选择可拼车的数据
     fleetData: [], // 选择车队的数据
     selectCar: [], // 派车时派发的车辆数据
-    orderSendData: [] // 派车时需要的订单信息
+    orderSendData: [], // 派车时需要的订单信息
+    selectTree: [] // 用车单位树
   },
   mutations: {
     setCarpool (state, payload) {
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     },
     setOrderData (state, payload) {
       state.orderSendData = payload
+    },
+    setSelectTree (state, payload) {
+      state.selectTree = payload
     }
   },
   actions: {

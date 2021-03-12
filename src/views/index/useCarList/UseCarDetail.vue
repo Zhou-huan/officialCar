@@ -181,7 +181,6 @@ export default {
     async getDetail () {
       await getApplyInfoById({ applyId: this.id }, (res) => {
         this.detail = res.carAppFrom
-        console.log(this.detail)
       })
     },
     async toOpr (type, state) {

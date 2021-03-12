@@ -61,7 +61,7 @@
           </div>
           <div class="my-bottom">
             <h3 class="f24 fC333">累计费用</h3>
-            <h4 class="f48">{{homeData.money}}</h4>
+            <h4 class="f48">{{homeData.money | moneyFilter}}</h4>
             <p class="fCccc f24">费用次数  {{homeData.stayEvaluate+homeData.evaluated}}</p>
           </div>
         </div>
@@ -103,7 +103,7 @@ export default {
     },
     // 紧急用车
     useUrgeCar () {
-      if (getPrivilege([177]) && JSON.parse(getStore('userBean')).user_type === 1) {
+      if (getPrivilege([177]) || JSON.parse(getStore('userBean')).user_type === 1) {
         this.$router.push('/urgeApplay')
       } else {
         return this.$toast({
@@ -146,6 +146,16 @@ export default {
     },
     useCar () {
       this.checkApplyCar()
+    }
+  },
+  filters: {
+    moneyFilter (val) {
+      if (val > 10000) {
+        let moneyNum = (Math.round((val / 10000) * 100) / 100).toFixed(2)
+        return moneyNum + '万'
+      } else {
+        return val
+      }
     }
   }
 }

@@ -23,7 +23,7 @@
         </cell-group>
         <span v-show="errors2.has('pass3')" class="help is-error">{{errors2.first('pass3')}}</span>
       </div>
-      <p class="explain">密码要求由6-18位字符、数字及字母组成</p>
+      <!-- <p class="explain">密码要求由6-18位字符、数字及字母组成</p> -->
       <div class="btn-box">
         <button class="btn" @click="doSubmit">提交</button>
       </div>

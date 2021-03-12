@@ -27,7 +27,7 @@
             <div class="content"  v-if="listData.length > 0">
               <ul class="list-box">
                 <li v-for="(use, ind) in listData" :key="ind" @click="goDetail(use)">
-                  <img :src="use.img_path + use.car_picture" alt="">
+                  <img v-real-img="use.img_path + use.car_picture" alt="">
                   <div class="list-center" style="flex-grow: 1;">
                     <h4 class="f28">{{ use.yong_che_no }}</h4>
                     <p>用车人：<span class="fC333">{{ use.yong_che_ren }}</span></p>
@@ -62,11 +62,11 @@
           </cell-group>
           <cell-group>
             <p class="title-item">起始日期</p>
-            <field v-model="form.time1" placeholder="起始日期" disabled @click="toTimeClick('start')" />
+            <field v-model="form.time1" placeholder="起始日期" disabled @click="toTimeClick(0)" />
           </cell-group>
           <cell-group>
             <p class="title-item">截止日期</p>
-            <field v-model="form.time2" placeholder="截止日期" disabled @click="toTimeClick('end')" />
+            <field v-model="form.time2" placeholder="截止日期" disabled @click="toTimeClick(1)" />
           </cell-group>
         </div>
         <div class="btn-box">
@@ -75,8 +75,13 @@
         </div>
       </div>
     </Popup>
-    <action-sheet v-model="showDateTime">
-      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" v-if="showDateTime" :title="this.timeType === 'start' ? '起始时间' : '截止时间'"></datetime-picker>
+    <!-- 起始时间弹窗 -->
+    <action-sheet v-model="showDateTimeOut">
+      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" :min-date="minDateOut" :max-date="maxDateOut" title="起始时间"></datetime-picker>
+    </action-sheet>
+    <!-- 截止时间弹窗 -->
+    <action-sheet v-model="showDateTimeIn">
+      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" :min-date="minDateIn" :max-date="maxDateIn" title="截止时间"></datetime-picker>
     </action-sheet>
   </div>
 </template>
@@ -143,8 +148,14 @@ export default {
         type: '0' // 数据类型
       },
       listData: [],
-      showDateTime: false,
-      timeType: ''
+      // 时间弹窗部分
+      showDateTimeOut: false,
+      showDateTimeIn: false,
+      timeType: '',
+      minDateOut: new Date(2010, 10, 1),
+      maxDateOut: new Date(2050, 10, 1),
+      minDateIn: new Date(),
+      maxDateIn: new Date(2050, 10, 1)
     }
   },
   mounted () {
@@ -223,21 +234,28 @@ export default {
         }
       })
     },
+    // 时间弹窗部分
     toTimeClick (type) {
       this.timeType = type
-      this.showDateTime = true
+      if (type === 0) {
+        this.showDateTimeOut = true
+      } else {
+        this.showDateTimeIn = true
+      }
     },
     timeCancel () {
-      this.showDateTime = false
+      this.showDateTimeOut = false
+      this.showDateTimeIn = false
     },
     timeConfirm (value) {
       const val = moment(value).format('YYYY-MM-DD HH:mm')
       switch (this.timeType) {
-        case 'start': this.form.time1 = val; break
-        case 'end': this.form.time2 = val; break
+        case 0: this.form.time1 = val; this.minDateIn = value; break
+        case 1: this.form.time2 = val; this.maxDateOut = value; break
         default:
       }
-      this.showDateTime = false
+      this.showDateTimeOut = false
+      this.showDateTimeIn = false
     }
   }
 }

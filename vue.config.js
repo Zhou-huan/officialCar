@@ -22,14 +22,14 @@ module.exports = {
     config.resolve.symlinks(true)
   },
   devServer: {
-    port: '6974', // 指定要监听请求的端口号
+    port: '6991', // 指定要监听请求的端口号
     proxy: {
       '/': { // 配置跨域处理 可以设置多个
         // target: 'http://192.168.0.56:8080/carmon/'
         // target: 'http://192.168.0.252:8080/ht/'
         // target: 'http://ycya.f3322.net:10000/ht/'
-        // target: 'http://ycya.f3322.net:6991/ht'
-        target: 'http://cl.4b.cn:6974/gwc/'
+        target: 'http://ycya.f3322.net:6991/ht'
+        // target: 'http://cl.4b.cn:6974/gwc/'
         //     // target: 'http://47.108.14.185:6979/xinyang/service/', // 信阳
         //     // target: 'http://47.108.14.185:6980/gchb2.5/service/',
         //     // target: 'http://47.108.14.185:6979/gchb2.5/service/', // 阳光郎洁

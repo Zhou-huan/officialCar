@@ -36,31 +36,33 @@
         <cell-group>
            <p class="title-item">出车时间</p>
            <div class="change-box">
-             <input v-model="form.apply_use_time_str" class="timeText" disabled/><img  @click="changeTime(0)"  src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+             <input v-model="form.apply_use_time_str" placeholder="请选择出车时间" v-validate="'required'" data-vv-as="出车时间" :name="'apply_use_time_str'" class="timeText" disabled/><img  @click="changeTime(0)"  src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
            </div>
+           <span v-show="errors2.has('apply_use_time_str')" class="help is-error">{{errors2.first('apply_use_time_str')}}</span>
         </cell-group>
         <cell-group>
            <p class="title-item">归队时间</p>
            <div class="change-box">
-              <input v-model="form.apply_back_time_str" class="timeText" disabled/><img  @click="changeTime(2)" src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+              <input v-model="form.apply_back_time_str" placeholder="请选择出车时间" v-validate="'required'" data-vv-as="归队时间" :name="'apply_back_time_str'" class="timeText" disabled/><img  @click="changeTime(2)" src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
            </div>
+           <span v-show="errors2.has('apply_back_time_str')" class="help is-error">{{errors2.first('apply_back_time_str')}}</span>
         </cell-group>
       </div>
       <div class="form-box">
         <div class="title"><img src="@/assets/images/applay_danwei.png" alt=""> 用车信息</div>
         <cell-group>
           <p class="title-item">乘车人</p>
-          <field v-model="form.yong_che_ren" placeholder="请输入乘车人姓名" v-validate="'required'" data-vv-as="姓名" :name="'yong_che_ren'"/>
+          <field v-model="form.yong_che_ren" maxlength="20" placeholder="请输入乘车人姓名" v-validate="'required'" data-vv-as="姓名" :name="'yong_che_ren'"/>
           <span v-show="errors2.has('yong_che_ren')" class="help is-error">{{errors2.first('yong_che_ren')}}</span>
         </cell-group>
         <cell-group>
            <p class="title-item">联系电话</p>
-          <field v-model="form.apply_use_phone" placeholder="请输入联系电话"  v-validate="'required|phoneRules'" data-vv-as="联系电话" :name="'apply_use_phone'"/>
+          <field v-model="form.apply_use_phone" maxlength="11" placeholder="请输入联系电话"  v-validate="'required|phoneRules'" data-vv-as="联系电话" :name="'apply_use_phone'"/>
           <span v-show="errors2.has('apply_use_phone')" class="help is-error">{{errors2.first('apply_use_phone')}}</span>
         </cell-group>
         <cell-group>
           <p class="title-item">乘车人数</p>
-          <field v-model="form.apply_man_num"  placeholder="请输入用车人数" v-validate="'required'" data-vv-as="用车人数" :name="'apply_man_num'"/>
+          <field v-model="form.apply_man_num" type="number" maxlength="2" placeholder="请输入用车人数" v-validate="'required|numRules'" data-vv-as="用车人数" :name="'apply_man_num'"/>
           <span v-show="errors2.has('apply_man_num')" class="help is-error">{{errors2.first('apply_man_num')}}</span>
         </cell-group>
         <cell-group>
@@ -123,7 +125,7 @@
             </radio-group>
           </div>
           <div @click="openLeader" v-if="form.have_leader === 1">
-            <p class="leader-names" v-if="leaderResult.length"><span v-for="(item, index) in leaderResult" :key="index">{{item.leader_name}}</span></p>
+            <p class="leader-names" v-if="showLeaderText.length"><span v-for="(item, index) in showLeaderText" :key="index">{{item.leader_name}}</span></p>
             <field v-else placeholder="请选择领导" disabled/>
           </div>
         </cell-group>
@@ -146,7 +148,8 @@
         </cell-group>
         <cell-group>
           <p class="title-item">出发地详细地址</p>
-          <field v-model="form.apply_use_address_2" placeholder="详细地址补充" @input="addressChange(1)"/>
+          <!-- v-throttling="addressChange(1)" -->
+          <field v-model="form.apply_use_address_2" maxlength="50" placeholder="详细地址补充" @input="addressChange(1)"/>
         </cell-group>
         <!-- 出发地址历史搜索框 -->
         <div class="address-box" v-show="isShowOutSearch">
@@ -164,7 +167,7 @@
         </cell-group>
         <cell-group>
           <p class="title-item">目的地详细地址</p>
-          <field v-model="form.apply_destination_2" placeholder="详细地址补充" @input="addressChange(2)"/>
+          <field v-model="form.apply_destination_2" maxlength="50" placeholder="详细地址补充" @input="addressChange(2)"/>
           <!-- 目的地址历史搜索框 -->
           <div class="address-box" v-if="isShowInSearch">
             <ul class="address-list">
@@ -180,12 +183,11 @@
         <div class="title"><img src="@/assets/images/applay_qita.png" alt="">其他</div>
         <cell-group>
            <p class="title-item">备注</p>
-           <field v-model="form.apply_bz" placeholder="请输入备注"/>
+           <field v-model="form.apply_bz" maxlength="50" placeholder="请输入备注"/>
         </cell-group>
       </div>
       <div class="form-bottom">
-        <!-- <button class="fC999" @click="doRest">重置</button> -->
-        <button class="submit" @click="doSubmit" :disabled="btnDisabled">提交</button>
+        <button class="submit" v-debounce="doSubmit">提交</button>
       </div>
         <action-sheet v-model="timeShow">
             <datetime-picker
@@ -240,7 +242,7 @@
                 <span>{{val.car_type_name}}</span>
                 <div class="right">
                   <button class="car-reduce" @click="reduce(index)">-</button>
-                  <input type="number" class="car-num" v-model="val.count">
+                  <field type="digit" maxlength="3" v-model="val.count"/>
                   <button @click="add(index)">+</button>
                 </div>
               </li>
@@ -252,11 +254,9 @@
           </div>
         </popup>
         <!-- 有所领导时的列表 -->
-        <popup v-model="isShowLeader" position="bottom" :style="{ height: '60%' }" @close="closeLeader" @open="openLeader">
+        <popup v-model="isShowLeader" position="bottom" :style="{ height: '60%' }" @open="openLeader">
           <div class="carType-box">
-            <h3 class="carType-title">选择领导</h3>
-            <!-- <checkbox-group v-model="leaderResult">
-            </checkbox-group> -->
+            <h3 class="carType-title leader-title"><span>选择领导</span><span class="leader-ok" @click="leaderSubmit">确定</span></h3>
               <cell-group>
                 <cell
                   v-for="(item, index) in leaderList"
@@ -285,7 +285,7 @@ import Map from '@/components/map'
 import moment from 'moment'
 import '@/validate'
 import { preList, getTask, addAppaly, getArea, getApplyInfoById, getSearchPlace } from '@/libs/const'
-import { transformTime, getStore, amapTobmap, bmapToamap } from '@/libs/util'
+import { transformTime, getStore, amapTobmap, bmapToamap, deepCopy } from '@/libs/util'
 import { Field, CellGroup, Cell, DatetimePicker, ActionSheet, RadioGroup, Radio, Overlay, Icon, Popup, Checkbox } from 'vant'
 import Selector from '@/components/selector/selector'
 export default {
@@ -309,11 +309,11 @@ export default {
     return {
       timeShow: false,
       isShowRules: false,
-      btnDisabled: false,
       isShowCarType: false, // 车辆类型框显示与否
       isShowLeader: false, // 领导框是否显示
       leaderList: [], // 领导数据
       leaderResult: [], // 选择后的领导
+      showLeaderText: [], // 页面展示的领导数据
       carList: [], // 车辆类型数据
       showCarList: [], // 选择后的车辆类型数据
       iShowMapBox: false, // 地图盒子是否显示
@@ -328,8 +328,8 @@ export default {
         yong_che_xz: 0, // yong_che_xz（用车性质id/int）
         apply_qy_id: 0, // apply_qy_id（用车区域id/int）
         apply_fwzx_id: 0, // apply_fwzx_id（服务中心id/int）
-        apply_use_time_str: moment(new Date()).format('YYYY-MM-DD HH:mm'), // apply_use_time_str（出车时间/string/yyyy-MM-dd HH:mm:ss
-        apply_back_time_str: moment(new Date()).format('YYYY-MM-DD HH:mm'), // apply_back_time_str（归队时间/string/yyyy-MM-dd HH:mm:ss）
+        apply_use_time_str: '', // apply_use_time_str（出车时间/string/yyyy-MM-dd HH:mm:ss
+        apply_back_time_str: '', // apply_back_time_str（归队时间/string/yyyy-MM-dd HH:mm:ss）
         apply_use_address_1: '', // apply_use_address1（出车地点/string）
         apply_use_address_2: '', //
         start_longitude: '', // start_longitude（出车地点经度/string）
@@ -341,7 +341,7 @@ export default {
         apply_remark: 0, // apply_remark（用车事由/string、注：不是id是字符串）
         audit_user_id: 0, // audit_user_id（审核人id/int）
         object_id: 0, // object_id（任务号id/int）
-        is_chartered_bus: 1, // is_chartered_bus（是否包车/int、1是0否）
+        is_chartered_bus: 0, // is_chartered_bus（是否包车/int、1是0否）
         apply_bz: '', // apply_bz（订单备注/string）
         carInfo: '', // 车辆类型信息
         carry_secret: 0, // 是否携带密品
@@ -374,8 +374,8 @@ export default {
       maxDateOut: new Date(2050, 10, 1),
       minDateIn: new Date(),
       maxDate: new Date(2050, 10, 1),
-      currentDateIn: new Date(),
-      currentDateOut: new Date(),
+      currentDateIn: '',
+      currentDateOut: '',
       isChangePlace: true, // 是不是自定义进行选择位置信息（用于区别是自己选择地址还是后台获取的地址）
       OutPlaceList: [
         {
@@ -397,6 +397,7 @@ export default {
   created () {
     this.$nextTick(() => {
       this.getList()
+      this.judgeTime()
     })
   },
   mounted () {
@@ -428,6 +429,25 @@ export default {
       this.getTime()
       this.iShowMapBox = false
     },
+    // 申请时间判断
+    judgeTime () {
+      var date = new Date()
+      const yy = date.getFullYear()
+      const mm = date.getMonth()
+      const hh = date.getHours()
+      const dd = date.getDate()
+      if (hh > 16) {
+        // 如果现在时间还没到16点就可以申请明天的订单。如果超过了就只能申请后天的了
+        this.minDate = new Date(yy, mm, dd + 2)
+      } else {
+        this.minDate = new Date(yy, mm, dd + 1)
+      }
+      this.currentDateIn = this.minDate
+      this.currentDateOut = this.minDate
+      this.minDateIn = this.minDate
+      // this.form.apply_use_time_str = moment(this.minDate).format('YYYY-MM-DD HH:mm')
+      // this.form.apply_back_time_str = moment(this.minDate).format('YYYY-MM-DD HH:mm')
+    },
     changeAddress (num) {
       if (this.isChangePlace) {
         this.iShowMapBox = true
@@ -454,7 +474,6 @@ export default {
         })
       })
       this.isShowLeader = true
-      console.log(this.leaderResult)
     },
     // 是否有所领导
     changeLeader (e) {
@@ -469,6 +488,12 @@ export default {
           return val
         }
       })
+    },
+    // 选择所领导确定操作
+    leaderSubmit () {
+      this.closeLeader()
+      this.showLeaderText = deepCopy(this.leaderResult)
+      this.isShowLeader = false
     },
     // 提交时车辆数据类型转换
     changeCarData () {
@@ -496,8 +521,8 @@ export default {
       this.isShowCarType = true
     },
     reduce (index) {
-      if (this.carList[index].count === 0) {
-        return false
+      if (this.carList[index].count <= 0) {
+        this.carList[index].count = 0
       } else {
         this.carList[index].count = this.carList[index].count - 1
       }
@@ -604,6 +629,7 @@ export default {
             // 回显领导数据
             if (resData.have_leader === 1) {
               this.leaderResult = resData.leaderList
+              this.showLeaderText = this.leaderResult
               this.leaderList.forEach(val => {
                 resData.leaderList.forEach(item => {
                   if (val.id === item.id) {
@@ -644,9 +670,10 @@ export default {
             this.getDistance()
             this.getTime()
           })
-        } else {
-          this.getTaskList(this.auditUser[0].id)
         }
+        //  else {
+        //   this.getTaskList(this.auditUser[0].id)
+        // }
         this.user_dept_name = res.userbean.user_dept_name
         this.user_name = res.userbean.user_name
         this.form.apply_name_id = res.userbean.id
@@ -704,14 +731,22 @@ export default {
     },
     natureChange (e) {
       this.form.yong_che_xz = e.id
-      if (e.id === 3) {
-        this.isXinghao = true
-        this.form.audit_user_id = this.auditUser[0].id
-        this.form.object_id = this.TaskList[0].objectId
+      if (this.form.apply_use_time_str !== '' && this.form.apply_back_time_str !== '') {
+        if (e.id === 3) {
+          this.isXinghao = true
+          this.form.audit_user_id = this.auditUser[0].id
+          this.getTaskList(this.auditUser[0].id)
+        } else {
+          this.isXinghao = false
+          this.form.audit_user_id = 0
+          this.form.object_id = 0
+        }
       } else {
-        this.isXinghao = false
-        this.form.audit_user_id = 0
-        this.form.object_id = 0
+        this.$toast({
+          message: '请先选择时间',
+          duration: 1000,
+          className: 'toastStyle'
+        })
       }
     },
     reasonChange (e) {
@@ -743,13 +778,6 @@ export default {
     },
     auditorChange (e) {
       this.form.audit_user_id = e.id
-      // getTask({
-      //   auditId: e.id,
-      //   useTime: this.form.apply_use_time_str
-      // }, res => {
-      //   this.TaskList = res.data
-      //   this.form.object_id = this.TaskList[0].objectId
-      // })
       this.getTaskList(e.id)
     },
     getTaskList (auditId, callback) {
@@ -758,7 +786,7 @@ export default {
         useTime: this.form.apply_use_time_str
       }, res => {
         this.TaskList = res.data
-        this.form.object_id = this.TaskList[0].objectId
+        this.form.object_id = this.TaskList.length ? this.TaskList[0].objectId : 0
         callback && callback() // 回调函数，有就执行，没有就不执行
       })
     },
@@ -772,6 +800,10 @@ export default {
       this.timeShow = false
       this.minDateIn = value
       this.currentDateOut = value
+      if (this.isXinghao) {
+        this.form.audit_user_id = this.auditUser[0].id
+        this.getTaskList(this.auditUser[0].id)
+      }
     },
     // 选择归队时间
     confirmTimeIn (value) {
@@ -796,6 +828,14 @@ export default {
     doSubmit () {
       var date1 = new Date(this.form.apply_use_time_str)
       var date2 = new Date(this.form.apply_back_time_str)
+      if (this.form.apply_use_time_str === '' && this.form.apply_back_time_str === '') {
+        this.$toast({
+          message: '归队时间和出车时间不能为空',
+          duration: 1000,
+          className: 'toastStyle'
+        })
+        return
+      }
       if (date1 >= date2) {
         this.$toast({
           message: '归队时间必须大于出车时间',
@@ -815,9 +855,9 @@ export default {
         return
       }
       if (this.form.have_leader === 1) {
-        if (this.leaderResult.length) {
+        if (this.showLeaderText.length) {
           let leaderEdit = ''
-          this.leaderResult.forEach((val, index) => {
+          this.showLeaderText.forEach((val, index) => {
             if (leaderEdit === '') {
               leaderEdit += `${val.id}`
             } else {
@@ -842,7 +882,6 @@ export default {
           }, (res) => {
             this.form.apply_qy_id = res.qyId
             addAppaly(this.form, res => {
-              this.btnDisabled = true
               this.$toast({
                 message: res.msg,
                 duration: 1000,

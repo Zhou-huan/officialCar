@@ -21,7 +21,7 @@
                   <div class="content" v-if="evaluateData.length > 0">
                     <ul class="list-box">
                       <li v-for="(item, index) in evaluateData" :key="index" @click="goDetail(item)">
-                        <img :src="item.img_path + item.car_picture" alt="">
+                        <img v-real-img="item.img_path + item.car_picture" alt="">
                         <div class="list-center">
                           <h4 class="f28">{{item.yong_che_no}}</h4>
                           <p>出发地：<span class="green">{{ item.apply_use_address_1 }}<em v-if="item.apply_use_address_2">({{ item.apply_use_address_2 }})</em></span></p>
@@ -29,8 +29,8 @@
                           <p>总里程：<span class="fC333">{{ item.xs_km }}km</span></p>
                         </div>
                         <div class="list-right">
-                          {{ item.allMoney }}元
                           <h4 v-if="item.is_settle_accounts === 0 && item.apply_flow_state === 4">待确认</h4>
+                          <div class="cost-money">{{ item.allMoney }}元</div>
                         </div>
                       </li>
                     </ul>
@@ -70,11 +70,11 @@
           </cell-group>
           <cell-group>
             <p class="title-item">起始日期</p>
-            <field v-model="form.time1" placeholder="起始日期" disabled @click="toTimeClick('start')" />
+            <field v-model="form.time1" placeholder="起始日期" disabled @click="toTimeClick(0)" />
           </cell-group>
           <cell-group>
             <p class="title-item">截止日期</p>
-            <field v-model="form.time2" placeholder="截止日期" disabled @click="toTimeClick('end')" />
+            <field v-model="form.time2" placeholder="截止日期" disabled @click="toTimeClick(1)" />
           </cell-group>
         </div>
         <div class="btn-box">
@@ -83,9 +83,13 @@
         </div>
       </div>
     </Popup>
-    <!-- 时间选择框 -->
-    <action-sheet v-model="showDateTime">
-      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" v-if="showDateTime" :title="this.timeType === 'start' ? '起始时间' : '截止时间'"></datetime-picker>
+    <!-- 起始时间弹窗 -->
+    <action-sheet v-model="showDateTimeOut">
+      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" :min-date="minDateOut" :max-date="maxDateOut" title="起始时间"></datetime-picker>
+    </action-sheet>
+    <!-- 截止时间弹窗 -->
+    <action-sheet v-model="showDateTimeIn">
+      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" :min-date="minDateIn" :max-date="maxDateIn" title="截止时间"></datetime-picker>
     </action-sheet>
   </div>
 </template>
@@ -177,8 +181,14 @@ export default {
       },
       evaluateData: [],
       isLoading: false,
-      showDateTime: false,
-      timeType: ''
+      // 时间弹窗部分
+      showDateTimeOut: false,
+      showDateTimeIn: false,
+      timeType: '',
+      minDateOut: new Date(2010, 10, 1),
+      maxDateOut: new Date(2050, 10, 1),
+      minDateIn: new Date(),
+      maxDateIn: new Date(2050, 10, 1)
     }
   },
   filters: {
@@ -212,27 +222,34 @@ export default {
           this.allLoaded = true
         }
         if (flag === 'bottom') {
-          this.evaluateData = this.useCarData.concat(res.rows)
+          this.evaluateData = this.evaluateData.concat(res.rows)
         } else {
           this.evaluateData = res.rows
         }
       })
     },
+    // 时间弹窗部分
     toTimeClick (type) {
       this.timeType = type
-      this.showDateTime = true
+      if (type === 0) {
+        this.showDateTimeOut = true
+      } else {
+        this.showDateTimeIn = true
+      }
     },
     timeCancel () {
-      this.showDateTime = false
+      this.showDateTimeOut = false
+      this.showDateTimeIn = false
     },
     timeConfirm (value) {
       const val = moment(value).format('YYYY-MM-DD HH:mm')
       switch (this.timeType) {
-        case 'start': this.form.time1 = val; break
-        case 'end': this.form.time2 = val; break
+        case 0: this.form.time1 = val; this.minDateIn = value; break
+        case 1: this.form.time2 = val; this.maxDateOut = value; break
         default:
       }
-      this.showDateTime = false
+      this.showDateTimeOut = false
+      this.showDateTimeIn = false
     },
     loadTop () {
       this.form.pagest = 1
@@ -241,7 +258,7 @@ export default {
     },
     loadBottom () {
       this.form.pagest += 1
-      this.getEvaluateList()
+      this.getEvaluateList('bottom')
       this.$refs.loadmore.onBottomLoaded()
     },
     onChange (index) {
@@ -302,8 +319,14 @@ export default {
 
 <style lang="less" scoped>
 .list-right {
-  font-size: 30px;
-  color: orange
+  font-size: 28px;
+  color: orange;
+  .cost-money {
+    width: 120px;
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+  }
 }
 .wrapper {
   display: flex;

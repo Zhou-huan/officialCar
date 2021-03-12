@@ -161,6 +161,12 @@ export default {
     doSubmit () {
       this.$validator.validateAll().then(async (valid) => {
         if (valid) {
+          if (this.form.xs_km <= 0) {
+            this.$toast({
+              message: '起始码必须小于终止码!'
+            })
+            return false
+          }
           driverBackCar(this.form, res => {
             this.$toast({
               message: '回车成功',

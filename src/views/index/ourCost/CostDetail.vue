@@ -60,7 +60,6 @@ export default {
   },
   mounted () {
     this.getDetails()
-    console.log(this.details)
   },
   methods: {
     toBack () {

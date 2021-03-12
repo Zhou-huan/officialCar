@@ -12,16 +12,22 @@
         <cell-group>
           <p class="title-item">用车单位</p>
           <field v-model="user_dept_name" placeholder="请输入用车单位" disabled @click="chanceDept"/>
+          <input type="hidden" v-model="form.apply_dept_id" name="user_dept_name" v-validate="'required'" data-vv-as="用车单位">
+          <span v-show="errors2.has('user_dept_name')" class="help is-error">{{errors2.first('user_dept_name')}}</span>
         </cell-group>
         <cell-group>
           <p class="title-item">申请人</p>
           <div class="selector-box">
             <selector :value="form.apply_name_id" :options="applayUser" @change="applayUserChange" :valueMap="['id', 'user_name']"></selector>
+            <input type="hidden" v-model="form.apply_name_id" name="apply_name_id" v-validate="'required'" data-vv-as="申请人">
           </div>
+          <span v-show="errors2.has('apply_name_id')" class="help is-error">{{errors2.first('apply_name_id')}}</span>
         </cell-group>
         <cell-group>
            <p class="title-item">申请人电话</p>
           <field v-model="form.apply_name_phone" placeholder="请输入申请人电话" disabled/>
+          <input type="hidden" v-model="form.apply_name_phone" name="apply_name_phone" v-validate="'required'" data-vv-as="申请人电话">
+          <span v-show="errors2.has('apply_name_phone')" class="help is-error">{{errors2.first('apply_name_phone')}}</span>
         </cell-group>
       </div>
       <div class="form-box">
@@ -38,13 +44,13 @@
         <cell-group>
            <p class="title-item">出车时间</p>
            <div class="change-box">
-             <input v-model="form.apply_use_time_str" class="timeText" disabled/><img  @click="changeTime(0)"  src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+             <input v-model="form.apply_use_time_str" placeholder="请输入出车时间" class="timeText" disabled/><img  @click="changeTime(0)"  src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
            </div>
         </cell-group>
         <cell-group>
            <p class="title-item">归队时间</p>
            <div class="change-box">
-              <input v-model="form.apply_back_time_str" class="timeText" disabled/><img  @click="changeTime(2)" src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
+              <input v-model="form.apply_back_time_str" placeholder="请输入归队时间" class="timeText" disabled/><img  @click="changeTime(2)" src="@/assets/images/applay_time.png" alt="" style="width:24px;height:24px">
            </div>
         </cell-group>
       </div>
@@ -52,17 +58,17 @@
         <div class="title"><img src="@/assets/images/applay_danwei.png" alt=""> 用车信息</div>
         <cell-group>
           <p class="title-item">乘车人</p>
-          <field v-model="form.yong_che_ren" placeholder="请输入乘车人姓名" v-validate="'required'" data-vv-as="姓名" :name="'yong_che_ren'"/>
+          <field v-model="form.yong_che_ren" maxlength="20" placeholder="请输入乘车人姓名" v-validate="'required'" data-vv-as="姓名" :name="'yong_che_ren'"/>
           <span v-show="errors2.has('yong_che_ren')" class="help is-error">{{errors2.first('yong_che_ren')}}</span>
         </cell-group>
         <cell-group>
            <p class="title-item">联系电话</p>
-          <field v-model="form.apply_use_phone" placeholder="请输入联系电话"  v-validate="'required|phoneRules'" data-vv-as="联系电话" :name="'apply_use_phone'"/>
+          <field v-model="form.apply_use_phone" maxlength="11" placeholder="请输入联系电话"  v-validate="'required|phoneRules'" data-vv-as="联系电话" :name="'apply_use_phone'"/>
           <span v-show="errors2.has('apply_use_phone')" class="help is-error">{{errors2.first('apply_use_phone')}}</span>
         </cell-group>
         <cell-group>
           <p class="title-item">乘车人数</p>
-          <field v-model="form.apply_man_num"  placeholder="请输入用车人数" v-validate="'required'" data-vv-as="用车人数" :name="'apply_man_num'"/>
+          <field v-model="form.apply_man_num" maxlength="2"  placeholder="请输入用车人数" v-validate="'required'" data-vv-as="用车人数" :name="'apply_man_num'"/>
           <span v-show="errors2.has('apply_man_num')" class="help is-error">{{errors2.first('apply_man_num')}}</span>
         </cell-group>
         <cell-group>
@@ -125,7 +131,7 @@
             </radio-group>
           </div>
           <div @click="openLeader" v-if="form.have_leader === 1">
-            <p class="leader-names" v-if="leaderResult.length"><span v-for="(item, index) in leaderResult" :key="index">{{item.leader_name}}</span></p>
+            <p class="leader-names" v-if="showLeaderText.length"><span v-for="(item, index) in showLeaderText" :key="index">{{item.leader_name}}</span></p>
             <field v-else placeholder="请选择领导" disabled/>
           </div>
         </cell-group>
@@ -148,7 +154,7 @@
         </cell-group>
         <cell-group>
           <p class="title-item">出发地详细地址</p>
-          <field v-model="form.apply_use_address_2" placeholder="详细地址补充" @input="addressChange(1)"/>
+          <field v-model="form.apply_use_address_2" maxlength="50" placeholder="详细地址补充" @input="addressChange(1)"/>
         </cell-group>
         <!-- 出发地址历史搜索框 -->
         <div class="address-box" v-show="isShowOutSearch">
@@ -166,7 +172,7 @@
         </cell-group>
         <cell-group>
           <p class="title-item">目的地详细地址</p>
-          <field v-model="form.apply_destination_2" placeholder="详细地址补充" @input="addressChange(2)"/>
+          <field v-model="form.apply_destination_2" maxlength="50" placeholder="详细地址补充" @input="addressChange(2)"/>
           <!-- 目的地址历史搜索框 -->
           <div class="address-box" v-if="isShowInSearch">
             <ul class="address-list">
@@ -182,12 +188,12 @@
         <div class="title"><img src="@/assets/images/applay_qita.png" alt="">其他</div>
         <cell-group>
            <p class="title-item">备注</p>
-           <field v-model="form.apply_bz" placeholder="请输入备注"/>
+           <field v-model="form.apply_bz" maxlength="50" placeholder="请输入备注"/>
         </cell-group>
       </div>
       <div class="form-bottom">
-        <!-- <button class="fC999" @click="doRest">重置</button> -->
-        <button class="submit" @click="doSubmit">提交</button>
+        <p v-if="costConfirmeText" class="text">{{costConfirmeText}}</p>
+        <button v-else class="submit" v-debounce="doSubmit">提交</button>
       </div>
         <action-sheet v-model="timeShow">
             <datetime-picker
@@ -242,23 +248,21 @@
                 <span>{{val.car_type_name}}</span>
                 <div class="right">
                   <button class="car-reduce" @click="reduce(index)">-</button>
-                  <input type="number" class="car-num" v-model="val.count">
+                   <field type="digit" maxlength="3" v-model="val.count"/>
                   <button @click="add(index)">+</button>
                 </div>
               </li>
             </ul>
             <div class="form-bottom car-btn">
               <button class="fC999" @click="cancle">取消</button>
-              <button class="submit" @click="carSubmit" :disabled="btnDisabled">确定</button>
+              <button class="submit" @click="carSubmit">确定</button>
             </div>
           </div>
         </popup>
         <!-- 有所领导时的列表 -->
-        <popup v-model="isShowLeader" position="bottom" :style="{ height: '60%' }" @close="closeLeader" @open="openLeader">
+        <popup v-model="isShowLeader" position="bottom" :style="{ height: '60%' }" @open="openLeader">
           <div class="carType-box">
-            <h3 class="carType-title">选择领导</h3>
-            <!-- <checkbox-group v-model="leaderResult">
-            </checkbox-group> -->
+            <h3 class="carType-title leader-title"><span>选择领导</span><span class="leader-ok" @click="leaderSubmit">确定</span></h3>
               <cell-group>
                 <cell
                   v-for="(item, index) in leaderList"
@@ -291,8 +295,8 @@ import TreeBox from '@/components/tree-box/tree'
 import Map from '@/components/map'
 import moment from 'moment'
 import '@/validate'
-import { preList, getDeptTree, getTask, getArea, getApplyInfoById, getSearchPlace, addUrgeAppaly, getApplayUsers, getAuditor } from '@/libs/const'
-import { transformTime, getStore, amapTobmap, bmapToamap } from '@/libs/util'
+import { preList, getDeptTree, getTask, getArea, getApplyInfoById, getSearchPlace, addUrgeAppaly, getApplayUsers, getAuditor, checkApply } from '@/libs/const'
+import { transformTime, getStore, amapTobmap, bmapToamap, deepCopy } from '@/libs/util'
 import { Field, CellGroup, Cell, DatetimePicker, ActionSheet, RadioGroup, Radio, Overlay, Icon, Popup, Checkbox } from 'vant'
 import Selector from '@/components/selector/selector'
 export default {
@@ -319,19 +323,20 @@ export default {
       isShowTree: false,
       timeShow: false,
       isShowRules: false,
-      btnDisabled: false,
       isShowCarType: false, // 车辆类型框显示与否
       isShowLeader: false, // 领导框是否显示
       historyAddress: {}, // 临时存储历史地址经纬度
       leaderList: [], // 领导数据
       leaderResult: [], // 选择后的领导
+      showLeaderText: [], // 页面展示的领导数据
       carList: [], // 车辆类型数据
       showCarList: [], // 选择后的车辆类型数据
       iShowMapBox: false, // 地图盒子是否显示
       currentMapType: 1, // 当前是选目的地还是选出发地的标识(0:出发地， 1:目的地)
+      costConfirmeText: '', // 有费用待确认的提示语
       form: {
         apply_name_id: 0, // apply_name_id（申请人id/int）
-        apply_dept_id: '701', // apply_dept_id（申请单位id/int）
+        apply_dept_id: '', // apply_dept_id（申请单位id/int）
         apply_name_phone: '', // apply_name_phone（申请人电话/string）
         yong_che_ren: '', // yong_che_ren（用车人/string）
         apply_use_phone: '', // 用车人电话
@@ -352,7 +357,7 @@ export default {
         apply_remark: 0, // apply_remark（用车事由/string、注：不是id是字符串）
         audit_user_id: 0, // audit_user_id（审核人id/int）
         object_id: 0, // object_id（任务号id/int）
-        is_chartered_bus: 1, // is_chartered_bus（是否包车/int、1是0否）
+        is_chartered_bus: 0, // is_chartered_bus（是否包车/int、1是0否）
         apply_bz: '', // apply_bz（订单备注/string）
         carInfo: '', // 车辆类型信息
         carry_secret: 0, // 是否携带密品
@@ -423,7 +428,7 @@ export default {
           // 有父亲
           if (parent) {
             parent.child ? parent.child.push(current) : parent.child = [current]
-          } else if (pid === 0) { // 这是跟
+          } else { // 没有父亲，这是跟
             arr.push(current)
           }
           return arr
@@ -455,7 +460,6 @@ export default {
         userName: '',
         requestDept: id
       }, res => {
-        console.log(res)
         this.applayUser = res.list
         this.form.apply_name_id = this.applayUser[0].id
         this.form.apply_name_phone = this.applayUser[0].user_phone
@@ -486,8 +490,22 @@ export default {
     },
     // 申请人改变时
     applayUserChange (e) {
-      this.form.apply_name_id = e.id
-      this.form.apply_name_phone = e.user_phone
+      checkApply({
+        applyNameId: e.id
+      }, res => {
+        if (res.state === 0) {
+          this.form.apply_name_id = e.id
+          this.form.apply_name_phone = e.user_phone
+          this.costConfirmeText = ''
+        } else {
+          this.costConfirmeText = res.str
+          this.$toast({
+            message: res.str,
+            duration: 1000,
+            className: 'toastStyle'
+          })
+        }
+      })
     },
     changeAddress (num) {
       if (this.isChangePlace) {
@@ -515,7 +533,6 @@ export default {
         })
       })
       this.isShowLeader = true
-      console.log(this.leaderResult)
     },
     // 是否有所领导
     changeLeader (e) {
@@ -530,6 +547,12 @@ export default {
           return val
         }
       })
+    },
+    // 选择所领导确定操作
+    leaderSubmit () {
+      this.closeLeader()
+      this.showLeaderText = deepCopy(this.leaderResult)
+      this.isShowLeader = false
     },
     // 提交时车辆数据类型转换
     changeCarData () {
@@ -557,8 +580,8 @@ export default {
       this.isShowCarType = true
     },
     reduce (index) {
-      if (this.carList[index].count === 0) {
-        return false
+      if (this.carList[index].count <= 0) {
+        this.carList[index].count = 0
       } else {
         this.carList[index].count = this.carList[index].count - 1
       }
@@ -723,7 +746,6 @@ export default {
         if (this.form.id !== 0) {
         // 通过订单id获取回显数据
           getApplyInfoById({ applyId: this.form.id }, (resEdite) => {
-            console.log(resEdite)
             // 获取表单项中的key数组
             let params = Object.keys(this.form)
             let resData = resEdite.carAppFrom
@@ -764,6 +786,7 @@ export default {
             // 回显领导数据
             if (resData.have_leader === 1) {
               this.leaderResult = resData.leaderList
+              this.showLeaderText = this.leaderResult
               this.leaderList.forEach(val => {
                 resData.leaderList.forEach(item => {
                   if (val.id === item.id) {
@@ -849,7 +872,7 @@ export default {
         useTime: this.form.apply_use_time_str
       }, res => {
         this.TaskList = res.data
-        this.form.object_id = this.TaskList[0].objectId
+        this.form.object_id = this.TaskList.length ? this.TaskList[0].objectId : 0
         callback && callback() // 回调函数，有就执行，没有就不执行
       })
     },
@@ -863,6 +886,7 @@ export default {
       this.timeShow = false
       this.minDateIn = value
       this.currentDateOut = value
+      this.getTaskList(this.auditUserEdit[0].id)
     },
     // 选择归队时间
     confirmTimeIn (value) {
@@ -914,9 +938,9 @@ export default {
         return
       }
       if (this.form.have_leader === 1) {
-        if (this.leaderResult.length) {
+        if (this.showLeaderText.length) {
           let leaderEdit = ''
-          this.leaderResult.forEach((val, index) => {
+          this.showLeaderText.forEach((val, index) => {
             if (leaderEdit === '') {
               leaderEdit += `${val.id}`
             } else {
@@ -941,7 +965,6 @@ export default {
           }, (res) => {
             this.form.apply_qy_id = res.qyId
             addUrgeAppaly(this.form, res => {
-              this.btnDisabled = true
               this.$toast({
                 message: '操作成功',
                 duration: 1000,

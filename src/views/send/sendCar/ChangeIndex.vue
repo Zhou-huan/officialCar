@@ -89,11 +89,23 @@ export default {
         }
       })
       this.$store.state.selectCar = this.carPeopleList
+      this.infoList = this.infoList.filter(item => {
+        return item.carId !== id
+      })
+      console.log(this.infoList, id)
     },
     doSubmit () {
       if (this.infoList.length <= 0) {
         this.$toast({
           message: '未选择车辆',
+          duration: 1000,
+          className: 'toastStyle'
+        })
+        return
+      }
+      if (this.$store.state.orderSendData.apply_type === 1 && this.infoList.length > 1) {
+        this.$toast({
+          message: '车辆数不能大于1',
           duration: 1000,
           className: 'toastStyle'
         })

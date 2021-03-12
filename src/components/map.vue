@@ -14,7 +14,7 @@
         :on-search-result="onSearchResult"
       ></el-amap-search-box>
       <el-amap class="amap-box" :zoom="zoom" :plugin="plugin" :center="center" :events="events" :mapStyle="mapStyle">
-        <el-amap-marker v-for="(marker, i) in markers" :key="i" :position="marker"></el-amap-marker>
+        <el-amap-marker :position="center"></el-amap-marker>
          <el-amap-text :text="address" :offset="offset" :position="center"></el-amap-text>
       </el-amap>
     </div>
@@ -32,15 +32,15 @@ export default {
   data () {
     let _this = this
     return {
-      center: [104.066143, 30.573095], // 地图中心点坐标 济南市
+      center: [116.461234, 39.921234], // 地图中心点坐标 济南市
       zoom: 12, // 初始化地图显示层级
       mapStyle: 'amap://styles/8b6be8ec497009e17a708205348b899a', // 设置地图样式
       markers: [[104.066143, 30.573095]],
       searchOption: { // 搜索条件
         city: '成都',
-        citylimit: true // 是否限制城市内搜索
+        citylimit: false // 是否限制城市内搜索
       },
-      address: '成都市',
+      address: '北京',
       offset: [0, 10],
       lng: 104.066143,
       lat: 30.573095,

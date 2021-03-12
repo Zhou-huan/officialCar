@@ -7,6 +7,9 @@
                         <img @click.stop="changeItem(item, item.isExpand)" class="icons" src="../../assets/images/close.png" alt="" v-if="item.isExpand">
                         <img @click.stop="changeItem(item, item.isExpand)" class="icons" src="../../assets/images/open.png" alt="" v-else>
                     </template>
+                    <template v-else>
+                      <img src="../../assets/images/At_person.png" alt="" class="icons">
+                    </template>
                     {{item.name}}
                 </div>
             </div>
@@ -30,7 +33,6 @@ export default {
   },
   data () {
     return {
-      checked: false,
       dataList: []
     }
   },

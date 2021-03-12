@@ -1,5 +1,5 @@
 .applay {
-    padding: 130px 0px 0;
+    padding: 130px 0px;
     font-size: 28px;
     background-color: rgb(247, 247, 247);
     .header-bar {
@@ -30,25 +30,36 @@
                 justify-content: space-between;
                 border-bottom: 1px solid #eee;
                 padding: 20px;
-                .car-num {
-                    border: 0;
-                    border-bottom: 1px solid #000;
-                    width: 60px;
-                    text-align: center;
-                }
-                button {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    border-color: #3378F1;
-                    margin: 0 10px;
-                    color: #3378F1;
-                    line-height: 30px;
-                    font-size: 40px;
-                }
-                .car-reduce {
-                    color: #666;
-                    border-color: #666;
+                .right {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    .van-cell {
+                        width: 60px;
+                        padding: 0;
+                    }
+                    /deep/.van-cell__value--alone {
+                        width: 40px;
+                        text-align: center;
+                        border-bottom: 1px solid #333;
+                        .van-field__control {
+                            text-align: center;
+                        }
+                    }
+                    button {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        border-color: #3378F1;
+                        margin: 0 10px;
+                        color: #3378F1;
+                        line-height: 30px;
+                        font-size: 40px;
+                    }
+                    .car-reduce {
+                        color: #666;
+                        border-color: #666;
+                    }
                 }
             }
         }
@@ -57,6 +68,16 @@
             bottom: 0;
             left: 0;
             background-color: #fff;
+        }
+        .leader-title {
+            display: flex;
+            span {
+                width: 50%;
+                text-align: right;
+            }
+            .leader-ok {
+                padding-right: 30px;
+            }
         }
     }
     .form-box {
@@ -112,7 +133,7 @@
             padding:20px 25px;
         }
         .leader-names {
-            padding: 0px 36px 10px;
+            padding: 10px 36px 20px;
             span {
                 margin-right: 10px;
             }
@@ -209,9 +230,13 @@
         z-index: 99;
     }
     .form-bottom {
-        padding: 24px 25px;
+        background-color: #f7f7f7;
+        padding: 15px 0px;
         width: 100%;
         box-sizing: border-box;
+        position: fixed;
+        bottom: 0;
+        left: 0;
         display: flex;
         flex-direction: row;
         justify-content: space-around;
@@ -221,6 +246,10 @@
             background: #FFFFFF;
             border-radius: 8px;
             border: none;
+        }
+        .text {
+            color: #f00;
+            height: 76px;
         }
         .submit {
             background-color: #3378F1;

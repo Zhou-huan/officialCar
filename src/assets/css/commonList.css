@@ -1,0 +1,189 @@
+.useCarList {
+  font-size: 28px;
+  padding: 100px 36px 0px;
+}
+.useCarList .title-right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.useCarList .title-right img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+.useCarList /deep/ .van-overlay {
+  z-index: 2020 !important;
+}
+.useCarList .van-popup {
+  z-index: 2027 !important;
+}
+.useCarList .van-tabs {
+  position: fixed;
+  top: 90px;
+  left: 0px;
+  z-index: 999;
+  border-bottom: 1px solid #eee;
+  width: 100%;
+}
+.useCarList /deep/ .mint-loadmore {
+  margin-top: 80px;
+}
+.useCarList /deep/ .mint-loadmore .mint-loadmore-top,
+.useCarList /deep/ .mint-loadmore .mint-loadmore-bottom {
+  text-align: center;
+}
+.useCarList /deep/ .mint-loadmore .mint-loadmore-text {
+  font-size: 30px;
+}
+.useCarList .content {
+  min-height: 85vh;
+  padding-top: 10px;
+}
+.useCarList .content .list-box li {
+  display: flex;
+  flex-direction: row;
+  font-size: 24px;
+  margin-top: 40px;
+  align-items: center;
+  align-content: center;
+  position: relative;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+.useCarList .content .list-box li img {
+  width: 120px;
+}
+.useCarList .content .list-box li p {
+  padding-top: 10px;
+  color: #ccc;
+}
+.useCarList .content .list-box li .list-center {
+  width: 450px;
+  box-sizing: border-box;
+  padding-left: 20px;
+}
+.useCarList .content .list-box li .list-center .list-title {
+  display: flex;
+  flex-direction: row;
+}
+.useCarList .content .list-box li .list-center .list-title .share-box {
+  padding: 0px;
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+  background-color: rgba(255, 123, 0, 0.863);
+  color: #fff;
+  text-align: center;
+  border-radius: 10px 0 10px 0;
+  position: relative;
+}
+.useCarList .content .list-box li .list-center .list-title .share-box .share-des {
+  position: absolute;
+  bottom: -8px;
+  left: 41px;
+  color: rgba(255, 68, 0, 0.89);
+  font-size: 20px;
+}
+.useCarList .content .list-box li .list-center p {
+  word-break: break-all;
+}
+.useCarList .content .list-box li .list-center p em {
+  font-style: normal;
+}
+.useCarList .content .list-box li .list-center .nowrap {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.useCarList .content .list-box li .list-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.useCarList /deep/ .v-modal {
+  z-index: 1988 !important;
+}
+.useCarList .mint-popup {
+  width: 80%;
+  height: 100%;
+  z-index: 2000 !important;
+}
+.useCarList .mint-popup .filter-box {
+  width: 100%;
+  height: 100%;
+  padding: 36px;
+  box-sizing: border-box;
+}
+.useCarList .mint-popup .filter-box h3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.useCarList .mint-popup .filter-box h3 img {
+  width: 38px;
+  height: 24px;
+}
+.useCarList .mint-popup .filter-box .carKinds p {
+  padding-top: 60px;
+  color: #737373;
+  font-size: 24px;
+}
+.useCarList .mint-popup .filter-box .carKinds ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding-bottom: 60px;
+}
+.useCarList .mint-popup .filter-box .carKinds ul li {
+  padding: 0px 16px;
+  height: 40px;
+  border-radius: 20px;
+  text-align: center;
+  line-height: 40px;
+  border: 1px solid #ccc;
+  color: #ccc;
+  margin-top: 15px;
+  margin-right: 20px;
+}
+.useCarList .mint-popup .filter-box .carKinds ul .active {
+  border: 1px solid #3378F1;
+  color: #3378F1;
+}
+.useCarList .mint-popup .filter-box .form-box p {
+  padding-top: 20px;
+  color: #737373;
+  font-size: 24px;
+}
+.useCarList .mint-popup .filter-box .form-box .selector-box {
+  padding: 10px 0;
+}
+.useCarList .mint-popup .filter-box .form-box .van-cell {
+  padding: 10px 0;
+  color: #333;
+  font-size: 28px;
+}
+.useCarList .mint-popup .filter-box .btn-box {
+  margin-top: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.useCarList .mint-popup .filter-box .btn-box button {
+  width: 204px;
+  height: 80px;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 8px 0px rgba(0, 70, 192, 0.1);
+  border-radius: 8px;
+  border: none;
+  color: #737373;
+}
+.useCarList .mint-popup .filter-box .btn-box .doOk {
+  background-color: #3378F1;
+  color: #fff;
+}
+.costList /deep/ .mint-loadmore {
+  margin-top: 0px !important;
+}

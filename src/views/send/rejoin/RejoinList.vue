@@ -27,9 +27,9 @@
             <div class="content" v-if="listData.length > 0">
               <ul class="list-box">
                 <li v-for="(use, ind) in listData" :key="ind" @click="goDetail(use)">
-                  <img :src="use.img_path + use.car_picture" alt="">
+                  <img v-real-img="use.img_path + use.car_picture" alt="">
                   <div class="list-center" style="flex-grow: 1;">
-                    <h4 class="f28">{{ use.yong_che_no }}</h4>
+                    <div class="f28 fBold list-title"><span>{{ use.yong_che_no }}</span><p class="share-box" v-if="use.apply_type == 1">拼<span class="share-des">{{use.car_sharing_apply_id === 0 ? '主' : '从'}}</span></p></div>
                     <p>用车人：<span class="fC333">{{ use.yong_che_ren }}</span></p>
                     <p>驾驶员：<span class="blue">{{ use.apply_driver_name }}</span></p>
                     <p class="nowrap">目的地：<span class="blue">{{ use.apply_destination_1 }}<em v-if="use.apply_destination_2">({{ use.apply_destination_2 }})</em></span></p>
@@ -73,20 +73,16 @@
         </div>
       </div>
     </Popup>
-    <action-sheet v-model="showDateTime">
-      <datetime-picker @cancel="timeCancel" @confirm="timeConfirm" v-if="showDateTime" :title="this.timeType === 'start' ? '起始时间' : '截止时间'"></datetime-picker>
-    </action-sheet>
   </div>
 </template>
 
 <script>
 import HeaderBar from '@/components/header-bar/header-bar'
 import NoData from '@/components/no-data/no-data'
-import { Icon, Tab, Tabs, Swipe, SwipeItem, DatetimePicker, ActionSheet, Checkbox, CheckboxGroup, CellGroup, Cell } from 'vant'
+import { Icon, Tab, Tabs, Swipe, SwipeItem, Checkbox, CheckboxGroup, CellGroup, Cell } from 'vant'
 import { Loadmore, Popup } from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import { getBackCarList } from '@/libs/const'
-import moment from 'moment'
 export default {
   components: {
     HeaderBar,
@@ -97,8 +93,6 @@ export default {
     Swipe,
     SwipeItem,
     Popup,
-    DatetimePicker,
-    ActionSheet,
     Checkbox,
     CheckboxGroup,
     CellGroup,
@@ -136,9 +130,7 @@ export default {
         convoyIds: '',
         rejoinflag: 3 // 数据类型
       },
-      listData: [],
-      showDateTime: false,
-      timeType: ''
+      listData: []
     }
   },
   mounted () {
@@ -225,22 +217,6 @@ export default {
           this.listData = res.rows
         }
       })
-    },
-    toTimeClick (type) {
-      this.timeType = type
-      this.showDateTime = true
-    },
-    timeCancel () {
-      this.showDateTime = false
-    },
-    timeConfirm (value) {
-      const val = moment(value).format('YYYY-MM-DD HH:mm')
-      switch (this.timeType) {
-        case 'start': this.form.time1 = val; break
-        case 'end': this.form.time2 = val; break
-        default:
-      }
-      this.showDateTime = false
     }
   }
 }

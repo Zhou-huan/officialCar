@@ -70,8 +70,29 @@
         </div>
       </div>
     </template>
-    <template v-if="detail.apply_flow_state === 3">
-      <div class="form-box">
+    <div v-if="detail.apply_flow_state !== 3" class="mileage-info">
+      <h3>里程信息</h3>
+      <ul>
+        <li>
+          <h4>{{detail.apply_start_lm}}</h4>
+          <p>起始路码</p>
+        </li>
+        <li>
+          <h4>{{detail.apply_end_lm}}</h4>
+          <p>终止路码</p>
+        </li>
+        <li>
+          <h4>{{detail.xs_km}}</h4>
+          <p>行驶里程</p>
+        </li>
+        <li>
+          <h4>{{detail.gps_km}}</h4>
+          <p>GPS里程</p>
+        </li>
+      </ul>
+    </div>
+    <template v-else>
+      <div class="form-box" v-if="(detail.apply_convoy_id !== 0 && detail.apply_type === 1 && detail.car_sharing_apply_id === 0) || (detail.apply_convoy_id !== 0 && detail.apply_type === 0)">
         <div class="title"><img src="@/assets/images/applay_danwei.png" alt="">订单补充</div>
           <cell-group>
             <p class="title-item">是否使用叉车</p>
@@ -135,32 +156,11 @@
           <field v-model="form.travel_remark" placeholder="请输入行驶备注"/>
         </cell-group>
       </div>
-    <div class="btn-box" v-if="isShowBtn">
-      <button @click="doSubmit" class="backCar" v-if="detail.apply_flow_state === 3 && detail.apply_convoy_id !== 0 && detail.apply_type === 1 && detail.car_sharing_apply_id === 0">归队</button>
-      <button @click="doSubmit" class="backCar" v-if="detail.apply_flow_state === 3 && detail.apply_convoy_id !== 0 && detail.apply_type === 0">归队</button>
-    </div>
+      <div class="btn-box" v-if="isShowBtn">
+        <button @click="doSubmit" class="backCar" v-if="detail.apply_flow_state === 3 && detail.apply_convoy_id !== 0 && detail.apply_type === 1 && detail.car_sharing_apply_id === 0">归队</button>
+        <button @click="doSubmit" class="backCar" v-if="detail.apply_flow_state === 3 && detail.apply_convoy_id !== 0 && detail.apply_type === 0">归队</button>
+      </div>
     </template>
-    <div v-else class="mileage-info">
-      <h3>里程信息</h3>
-      <ul>
-        <li>
-          <h4>{{detail.apply_start_lm}}</h4>
-          <p>起始路码</p>
-        </li>
-        <li>
-          <h4>{{detail.apply_end_lm}}</h4>
-          <p>终止路码</p>
-        </li>
-        <li>
-          <h4>{{detail.xs_km}}</h4>
-          <p>行驶里程</p>
-        </li>
-        <li>
-          <h4>{{detail.gps_km}}</h4>
-          <p>GPS里程</p>
-        </li>
-      </ul>
-    </div>
       <action-sheet v-model="timeShow">
       <datetime-picker
       v-if="showTimeOut"
@@ -365,7 +365,6 @@ export default {
             return
           } else if (this.form.worker_num > 0) {
             this.form.have_worker = 1
-            console.log(this.form.worker_num, this.form.worker_hours <= 0)
             if (this.form.worker_hours <= 0) {
               this.$toast({
                 message: '工时必须大于0',
@@ -378,9 +377,10 @@ export default {
             this.form.have_worker = 0
             this.form.worker_hours = 0
           }
-          if (this.form.apply_start_lm > this.form.apply_end_lm) {
+          // Number(this.form.apply_start_lm) > Number(this.form.apply_end_lm)
+          if (this.form.xingshi_km <= 0) {
             this.$toast({
-              message: '起始路码要小于终止路码',
+              message: '起始码小于终止码!',
               duration: 1000,
               className: 'toastStyle'
             })
